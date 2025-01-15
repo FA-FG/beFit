@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1>Gym Details</h1>
+
+
+<div class="card">
+
+  <div class="card-content">
+    <span class="card-title">{{ gym.gym }}</span>
+    <p>Location: {{ gym.location }}</p>
+    <p>Description: {{ gym.description }}</p>
+    <p>Phone Number: {{ gym.phoneNumber }}</p>
+
+    <div class="card-section">
+      <a href="{% url 'gyms_update' gym.id %}">Edit</a>
+      <a href="{% url 'gyms_delete' gym.id %}">Delete</a>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+
+
+
