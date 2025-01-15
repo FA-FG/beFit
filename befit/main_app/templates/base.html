@@ -29,7 +29,10 @@
          
           {% if user.is_authenticated %}
           <li><a href="{% url 'profile' %}">Profile</a></li>
+          <li><a href="{% url 'index' %}">View All Gyms</a></li>
+          <li><a href="{% url 'gyms_create' %}">Add a gym</a></li>
           <form action="{% url 'logout' %}" method="post">
+
             {% csrf_token %}
             <button type="submit">Logout</button>
           </form>
