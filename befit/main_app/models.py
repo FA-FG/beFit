@@ -28,7 +28,7 @@ class Session(models.Model):
     trainer = models.CharField(max_length=50)
     avalibility = models.BooleanField(default=True)
     price = models.FloatField(default=0.0)
-    gym = models.ForeignKey(Gym,on_delete=models.CASCADE)
+    gym = models.ForeignKey(Gym,on_delete=models.CASCADE, default=7)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
