@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import  LoginRequiredMixin
 from .models import Gym,Session
 from django.views.generic.edit import CreateView, UpdateView,DeleteView
+from django.views.generic import ListView, DetailView
 
 # from .models import Class
 
@@ -34,6 +35,29 @@ class GymDelete(LoginRequiredMixin, DeleteView):
     model = Gym
     success_url = '/gyms/'
 
+
+
+class SessionList(LoginRequiredMixin, ListView):
+    model = Session
+
+class SessionDetail(LoginRequiredMixin, DetailView):
+    model = Session
+
+
+class SessionCreate(LoginRequiredMixin, CreateView):
+    model = Session
+    fields = '__all__'
+
+
+
+class SessionUpdate(LoginRequiredMixin, UpdateView):
+    model = Session
+    fields = ['location', 'time','date','trainer','price']
+
+
+class SessionDelete(LoginRequiredMixin, DeleteView):
+    model = Session
+    success_url = '/session/'
 
 
 
