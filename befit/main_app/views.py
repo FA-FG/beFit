@@ -4,7 +4,31 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import  LoginRequiredMixin
 
+from .models import Profile
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
+from django.contrib.auth.forms import UserCreationForm
+
+
 # from .models import Class
+class ProfileCreate(CreateView):
+  model = Profile
+  
+  fields = ['age', 'gender', 'weight', 'height', 'image']
+
+  def form_valid(self,form):
+    form.instance.user = self.request.user
+    if form.is_valid:
+      form.instance.isSubscribed = True
+
+      form.instance.save()
+
+      return super().form_valid(form)
+
+    else:
+      print(form.errors)  # Print out form errors for debugging
+
+
 
 # Create your views here.
 
@@ -37,3 +61,9 @@ def signup(request):
   form = UserCreationForm()
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
+
+
+  # profile view
+@login_required
+def profile(request):
+    return render(request, 'profile.html')

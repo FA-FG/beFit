@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+ {% block content %}
+<div class="row my-3 p-3">
+    
+    <h1>{{user.username}}'s profile page</h1>
+    
+    {% load static %}
+    <img src="{% static user.profile.image|cut:'main_app/static/' %}" alt="profile img" width="300px" height="300px">
+    
+    <p>Age: {{ user.profile.age }}</p>
+    <p>Gender: {{ user.profile.gender }}</p>
+    
+    <p>Weight: {{ user.profile.weight }} cm</p>
+    <p>Height: {{ user.profile.height }} kg</p>
+    
+    <p>Subscribed: {{ user.profile.isSubscribed }}</p>
+    {% if not user.profile.isSubscribed %}
+    <a href="{% url 'subscribe' %}">Subscribe</a>
+{% endif %}
+</div>
+
+{% endblock %}

@@ -25,9 +25,10 @@
 
         <ul class="right">
           <li><a href="{% url 'about' %}">About</a></li>
+          
          
           {% if user.is_authenticated %}
-         
+          <li><a href="{% url 'profile' %}">Profile</a></li>
           <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
             <button type="submit">Logout</button>
