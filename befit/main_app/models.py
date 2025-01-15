@@ -15,10 +15,10 @@ class Gym(models.Model):
     def get_absolute_url(self):
         return reverse('detail', kwargs={'gym_id': self.id})
 
-    
 
     def __str__(self):
         return self.gym
+
 
 class Session(models.Model):
     name = models.CharField(max_length=50)
@@ -32,6 +32,9 @@ class Session(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
+    def get_absolute_url(self):
+        return reverse('session_detail', kwargs={'pk': self.id})
+    
     
     def __str__(self):
         return self.name

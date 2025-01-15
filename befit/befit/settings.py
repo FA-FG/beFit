@@ -123,7 +123,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-LOGIN_REDIRECT_URL = '/classes'
+LOGIN_REDIRECT_URL = '/gyms'
 LOGOUT_REDIRECT_URL = '/'
 
 
