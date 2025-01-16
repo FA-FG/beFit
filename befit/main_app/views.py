@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import  LoginRequiredMixin
 from .models import Gym,Session
+from .forms import RegistrationForm
 from django.views.generic.edit import CreateView, UpdateView,DeleteView
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
@@ -37,7 +38,7 @@ class GymDelete(LoginRequiredMixin, DeleteView):
     model = Gym
     success_url = '/gyms/'
 
-
+#--------------------------------------------------------------------------------------------------
 
 class SessionList(LoginRequiredMixin, ListView):
     model = Session
@@ -69,6 +70,8 @@ class SessionDelete(LoginRequiredMixin, DeleteView):
     model = Session
     success_url = '/session/'
 
+#-------------------------------------------------------------------------------------------------------
+
 
 
 
@@ -87,9 +90,19 @@ def class_index(request):
 @login_required
 def gyms_detail(request, gym_id):
     gym = Gym.objects.get(id=gym_id)
-    # feeding_form = FeedingForm
+    Registration_form = RegistrationForm()
     # toys_cat_doesnt_have = Toy.objects.exclude(id__in = cat.toys.all().values_list('id'))
-    return render(request,'gyms/detail.html', {'gym' : gym })
+    return render(request,'gyms/detail.html', {'gym' : gym, 'Registration_form' : Registration_form})
+
+
+@login_required
+def Regist(request, session_id):
+    form = RegistrationForm(request.POST)
+    if form.is_valid():
+        new_Regist = form.save(commit=False)
+        new_Regist.session_id = session_id
+        new_Regist.save()
+        return redirect('detail', session_id = session_id)
 
 
 

@@ -18,5 +18,7 @@ urlpatterns = [
     path('session/create/', views.SessionCreate.as_view(), name='session_create'),
     path('session/<int:pk>/update/', views.SessionUpdate.as_view(), name='session_update'),
     path('session/<int:pk>/delete/', views.SessionDelete.as_view(), name='session_delete'),
-    
+
+    path('session/<int:session_id>/Regist/', views.Regist, name='Regist'),
+
 ]

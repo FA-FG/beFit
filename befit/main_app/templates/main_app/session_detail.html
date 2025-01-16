@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Toy Details</h1>
+<h1>Session Details</h1>
 
 <div class="row">
   <div class="col s6 col-offset-3">
@@ -16,7 +16,54 @@
         <a href="{% url 'session_delete' session.id %}">Delete</a>
       </div>
 
+      <div>
+
+        <div>
+          <form method="post" action="{% url 'Regist' session.id %}">
+            {% csrf_token %}
+            {{ RegistrationForm.as_p }}
+            <input type="submit" class="btn" value="Registration">
+          </form>
+        </div>
+        <br>
+        <table class="striped">
+          <thead>
+          <tr>
+            <th>Name</th>
+              <th>Date</th>
+          </tr>
+          </thead>
+    
+          <tbody>
+            {% for registration in session.registration_set.all %}
+            <tr>
+              <td>{{registration.name}}</td>
+              <td>{{registration.date}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <hr>
+
     </div>
   </div>
 </div>
+
+
+<script>
+  var dateEl = document.getElementById('id_date');
+  M.Datepicker.init(dateEl, {
+    format: 'yyyy-mm-dd',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+
+  let selectEl = document.getElementById('id_name');
+  M.FormSelect.init(selectEl);
+</script>
+
 {% endblock %}
+
