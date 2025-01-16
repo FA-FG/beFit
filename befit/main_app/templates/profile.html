@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% block content %}
+<div class="row my-3 p-3">
+  <h1>{{ user.username }}'s profile page</h1>
+
+  {% if user.profile %} {% load static %}
+  <!-- Correct the static image path usage -->
+  <img
+    src="{% static user.profile.image|cut:'main_app/static/' %}"
+    alt="profile img"
+    width="300px"
+    height="300px"
+  />
+
+  <p>Age: {{ user.profile.age }}</p>
+  <p>Gender: {{ user.profile.gender }}</p>
+  <p>Weight: {{ user.profile.weight }} kg</p>
+  <p>Height: {{ user.profile.height }} cm</p>
+
+  <p>Subscribed: {{ user.profile.isSubscribed }}</p>
+
+  <div class="card">
+    <li><a href="{% url 'profile_update' user.profile.id %}">Edit</a></li>
+  </div>
+
+  {% if not user.profile.isSubscribed %}
+  <a href="{% url 'subscribe' %}">Subscribe</a>
+  {% endif %} {% else %}
+  <p>You didn't finish the registration process, please Create Your Profile.</p>
+  <a href="{%url 'profile_create' %}">Create Profile</a>
+  {% endif %}
+</div>
+
+{% endblock %}

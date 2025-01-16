@@ -83,6 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DATABASENAME'),
         'USER': os.getenv('DATABASEUSER'),
+        'PASSWORD': os.getenv('DATABASEPASSWORD'),
     }
 }
 
@@ -125,6 +126,7 @@ STATIC_URL = 'static/'
 
 LOGIN_REDIRECT_URL = '/gyms'
 LOGOUT_REDIRECT_URL = '/'
+
 
 
 # Default primary key field type
