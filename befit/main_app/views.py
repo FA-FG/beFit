@@ -5,6 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import  LoginRequiredMixin
 from .models import Gym,Session
 from django.views.generic.edit import CreateView, UpdateView,DeleteView
+from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
+
 
 from .models import Profile
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -41,7 +44,7 @@ class GymCreate(LoginRequiredMixin, CreateView):
     # fields = __all__: if no relationship
     model = Gym
     fields = ['gym', 'location', 'phoneNumber', 'description']
-    # success_url = '/cats/'
+   
 
     def form_valid(self, form):
         form.instance.user= self.request.user
@@ -60,6 +63,37 @@ class GymDelete(LoginRequiredMixin, DeleteView):
     model = Gym
     success_url = '/gyms/'
 
+
+
+class SessionList(LoginRequiredMixin, ListView):
+    model = Session
+
+class SessionDetail(LoginRequiredMixin, DetailView):
+    model = Session
+
+
+class SessionCreate(LoginRequiredMixin, CreateView):
+    model = Session
+    fields = ['name','location', 'time','date','trainer','price']
+
+    def form_valid(self, form):
+        # Set the user to the currently authenticated user
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    # Redirect the user after successful form submission
+    success_url = '/session/'
+
+
+
+class SessionUpdate(LoginRequiredMixin, UpdateView):
+    model = Session
+    fields = ['location', 'time','date','trainer','price']
+
+
+class SessionDelete(LoginRequiredMixin, DeleteView):
+    model = Session
+    success_url = '/session/'
 
 
 

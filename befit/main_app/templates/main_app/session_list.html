@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Session List</h1>
+
+{% for session in session_list %}
+
+
+  <a href="{% url 'session_detail' session.id %}">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">{{ session.name }}</span>
+            <p>Location: {{ session.location }}</p>
+        </div>
+    </div>
+  </a>
+{% endfor %}
+
+{% endblock %}
