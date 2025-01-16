@@ -14,23 +14,25 @@ from django.contrib.auth.forms import UserCreationForm
 
 # from .models import Class
 class ProfileCreate(CreateView):
-  model = Profile
-  
-  fields = ['age', 'gender', 'weight', 'height', 'image']
+    model = Profile
 
-  def form_valid(self,form):
-    form.instance.user = self.request.user
-    if form.is_valid:
-      form.instance.isSubscribed = True
+    fields = ['age', 'gender', 'weight', 'height', 'image']
+    success_url = '/gyms/'
 
-      form.instance.save()
+    def form_valid(self,form):
+        form.instance.user = self.request.user
+        if form.is_valid:
+            form.instance.isSubscribed = True
 
-      return super().form_valid(form)
-
-    else:
-      print(form.errors)  # Print out form errors for debugging
+            form.instance.save()
+            return super().form_valid(form)
 
 
+
+class ProfileUpdate(UpdateView):
+    model = Profile
+    fields = ['age','weight','height', 'image']
+    success_url = '/profile/'
 
 # Create your views here.
 
@@ -90,7 +92,7 @@ def signup(request):
     if form.is_valid():
       user = form.save()
       login(request, user)
-      return redirect('index')
+      return redirect('profile_create')
     else:
       error_message = 'Invalid Signup- Please try again later.'
 

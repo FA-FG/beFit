@@ -1,15 +1,17 @@
-{% extends 'base.html' %}
-{% block content %}
-  {% if object %}
-    <h1>Edit <span class="teal-text">{{object.name}}</span></h1>
-  {% else %}
-    <h1>Cont. Registration</h1>
-  {% endif %}
-  <form action="" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit!" class="btn">
-  </form>
+{% extends "base.html" %} {% block content %}
+
+{% if object %}
+    <h1>Edit Profile</h1>
+{% else %}
+{% endif %}
+    <h1>Create Your Profile</h1>
+
+{% if not user.profile.isSubscribed %}
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit">Submit</button>
+</form>
+{% else %}
+<p>You Already Have A Profile</p>
+{% endif %}
 {% endblock %}

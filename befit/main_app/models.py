@@ -9,6 +9,8 @@ GENDER = (
 )
 
 
+# Create your models here.
+
 # Profile Model 
 
 class Profile(models.Model):
@@ -22,13 +24,14 @@ class Profile(models.Model):
     isSubscribed = models.BooleanField(default=False)
 
     def get_absolute_url(self):
-        return reverse('index', kwargs={'profile_id':self.id})
+        return reverse('profile', kwargs={'profile_id': self.id})
+
 
     def __str__(self):
         return self.user.username
 
 
-# Create your models here.
+# Gyn Model
 
 class Gym(models.Model):
     gym = models.CharField(max_length=100)

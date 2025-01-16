@@ -14,6 +14,7 @@ urlpatterns = [
     path('profile/', profile, name='profile'),
     ## add profile info
     path('profile/create/', views.ProfileCreate.as_view(), name='profile_create'),
+    path('profile/<int:pk>/update/', views.ProfileUpdate.as_view(), name='profile_update'),
 
     #GYM
     path('gyms/', views.class_index, name='index'),
