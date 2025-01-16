@@ -1,17 +1,18 @@
-{% extends "base.html" %} {% block content %}
-
-{% if object %}
-    <h1>Edit Profile</h1>
-{% else %}
+{% extends "base.html" %} {% block content %} {% if object %}
+<h1>Edit Profile</h1>
+{% else %} 
+<h1>Create Your Profile</h1>
 {% endif %}
-    <h1>Create Your Profile</h1>
 
-{% if not user.profile.isSubscribed %}
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %} {{ form.as_p }}
   <button type="submit">Submit</button>
 </form>
-{% else %}
-<p>You Already Have A Profile</p>
-{% endif %}
+
+
+<script>
+  let selectEl = document.getElementById('id_type')
+  M.FormSelect.init(selectEl)
+</script>
+
 {% endblock %}

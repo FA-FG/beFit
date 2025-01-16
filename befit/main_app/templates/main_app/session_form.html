@@ -8,8 +8,37 @@
   <form action="" method="post">
     {% csrf_token %}
     <table>
-      {{ form.as_table }}
+      {% for field in form %}
+        <tr>
+          <td>{{ field.label }}</td>
+          <td>
+            {% if field.name == 'avalibility' %}
+              <!-- Materialize switch for 'avalibility' with True/False labels -->
+              <div class="switch">
+                <label>
+                  False
+                  {{ field }}
+                  <span class="lever"></span>
+                  True
+                </label>
+              </div>
+            {% else %}
+              {{ field }}
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
     </table>
     <input type="submit" value="Submit!" class="btn">
   </form>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Materialize switches
+      var elems = document.querySelectorAll('.switch input');
+      var instances = M.FormSelect.init(elems);
+    });
+  </script>
 {% endblock %}

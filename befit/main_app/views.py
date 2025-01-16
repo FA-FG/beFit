@@ -18,17 +18,22 @@ from django.contrib.auth.forms import UserCreationForm
 # from .models import Class
 class ProfileCreate(CreateView):
     model = Profile
+    fields = ['age', 'gender', 'type', 'weight', 'height', 'image']
 
-    fields = ['age', 'gender', 'weight', 'height', 'image']
-    success_url = '/gyms/'
+    def get_success_url(self):
+        # Check the 'type' field of the form instance to determine the redirect URL
+        if self.object.type == 'GO':
+            return '/gyms/create/'
+        else:
+            return '/gyms/'
 
-    def form_valid(self,form):
+    def form_valid(self, form):
         form.instance.user = self.request.user
-        if form.is_valid:
+        if form.is_valid():
             form.instance.isSubscribed = True
-
             form.instance.save()
             return super().form_valid(form)
+
 
 
 
@@ -67,6 +72,17 @@ class GymDelete(LoginRequiredMixin, DeleteView):
 
 class SessionList(LoginRequiredMixin, ListView):
     model = Session
+    template_name = 'session/index.html'  # Ensure this is the correct template
+    
+    def get_queryset(self):
+        # Check if the user is a Gym Owner (GO) or Normal User (NU)
+        if self.request.user.profile.type == 'NU':
+            # If Normal User, get all sessions
+            return Session.objects.all()
+        else:
+            # If Gym Owner, get only sessions related to the gym owned by the user
+            return Session.objects.filter(user=self.request.user)
+
 
 class SessionDetail(LoginRequiredMixin, DetailView):
     model = Session
@@ -74,7 +90,7 @@ class SessionDetail(LoginRequiredMixin, DetailView):
 
 class SessionCreate(LoginRequiredMixin, CreateView):
     model = Session
-    fields = ['name','location', 'time','date','trainer','price']
+    fields = ['name','location', 'time','date','trainer','price', 'avalibility']
 
     def form_valid(self, form):
         # Set the user to the currently authenticated user
@@ -104,9 +120,14 @@ def home(request):
 def about(request):
     return render(request,'about.html')
 
+
+# change this to gym_index
 @login_required
 def class_index(request): 
-    gyms = Gym.objects.all()
+    if request.user.profile.type == 'NU':
+        gyms = Gym.objects.all()
+    else:
+        gyms = Gym.objects.filter(user=request.user)
     return render(request,'gyms/index.html' , {'gyms' : gyms})
 
 

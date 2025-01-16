@@ -8,6 +8,10 @@ GENDER = (
     ('M', 'Male')
 )
 
+USER_TYPES = (
+    ('NU', 'Normal User'),
+    ('GO', 'GYM Owner')
+)
 
 # Create your models here.
 
@@ -21,6 +25,9 @@ class Profile(models.Model):
     weight = models.FloatField(default = 0.0)
     height = models.FloatField(default = 0.0)
     image = models.ImageField(upload_to='main_app/static/uploads/', default="")
+
+    type = models.CharField(max_length=2, choices=USER_TYPES, default = USER_TYPES[0][0])
+
     isSubscribed = models.BooleanField(default=False)
 
     def get_absolute_url(self):
@@ -31,6 +38,9 @@ class Profile(models.Model):
         return self.user.username
 
 
+
+
+
 # Gyn Model
 
 class Gym(models.Model):
@@ -38,6 +48,8 @@ class Gym(models.Model):
     location = models.CharField(max_length=100)
     phoneNumber = models.CharField()
     description = models.CharField()
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     # direct the user to newly created page
     def get_absolute_url(self):
@@ -56,7 +68,6 @@ class Session(models.Model):
     trainer = models.CharField(max_length=50)
     avalibility = models.BooleanField(default=True)
     price = models.FloatField(default=0.0)
-    gym = models.ForeignKey(Gym,on_delete=models.CASCADE, default=7)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
