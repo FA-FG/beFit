@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 
 
 GENDER = (
-    ('F', 'Female'),
-    ('M', 'Male')
+    ('M', 'Male'),
+    ('F', 'Female')
 )
 
 USER_TYPES = (
@@ -21,7 +21,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     age = models.IntegerField()
-    gender = models.CharField(max_length=6)
+    gender = models.CharField(max_length=1, choices=GENDER, default = GENDER[0][0])
     weight = models.FloatField(default = 0.0)
     height = models.FloatField(default = 0.0)
     image = models.ImageField(upload_to='main_app/static/uploads/', default="")
@@ -37,7 +37,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-
+  
 
 
 
