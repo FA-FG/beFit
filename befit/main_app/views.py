@@ -128,6 +128,39 @@ class SessionDelete(LoginRequiredMixin, DeleteView):
 
 
 
+# trainer
+class TrainerDetail(LoginRequiredMixin, DetailView):
+    model = Trainer
+    fields = "__all__"
+
+class TrainerCreate(LoginRequiredMixin, CreateView):
+    model = Trainer
+    fields = ['name', 'age', 'image', 'specialties', 'description']
+
+    def form_valid(self, form):
+        form.instance.gym = Gym.objects.get(user=self.request.user)
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return f'/gyms/{self.object.gym.id}/'
+
+
+class TrainerUpdate(LoginRequiredMixin, UpdateView):
+    model = Trainer
+    fields = ['name', 'age', 'image', 'specialties', 'description']
+    
+    def get_success_url(self):
+        gym_id = self.object.gym.id 
+        return f'/gyms/{gym_id}/'
+
+class TrainerDelete(LoginRequiredMixin, DeleteView):
+    model = Trainer
+    success_url = '/trainer/'
+
+    def get_success_url(self):
+        gym_id = self.object.gym.id 
+        return f'/gyms/{gym_id}/'
+
 
 def home(request):
     return render(request,'home.html')
@@ -149,12 +182,14 @@ def class_index(request):
 @login_required
 def gyms_detail(request, gym_id):
     gym = Gym.objects.get(id=gym_id)
-    # feeding_form = FeedingForm
-    # toys_cat_doesnt_have = Toy.objects.exclude(id__in = cat.toys.all().values_list('id'))
     
+    profile = request.user.profile
+
     trainers = Trainer.objects.filter(gym=gym)
 
-    return render(request,'gyms/detail.html', {'gym' : gym, 'trainers': trainers })
+    
+
+    return render(request,'gyms/detail.html', {'gym' : gym, 'trainers': trainers, 'profile': profile })
 
 
 

@@ -64,6 +64,7 @@ class Trainer(models.Model):
     name = models.CharField(max_length=50)
     age = models.IntegerField()
     image = models.ImageField(upload_to='main_app/static/uploads/', default="")
+    specialties = models.CharField(max_length=100, default="No Specialty Specified")
     description = models.CharField(max_length=250)
     gym = models.ForeignKey(Gym, on_delete = models.CASCADE)
 

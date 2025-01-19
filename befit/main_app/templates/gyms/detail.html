@@ -2,9 +2,7 @@
 
 <h1>Gym Details</h1>
 
-
 <div class="card">
-
   <div class="card-content">
     <span class="card-title">{{ gym.gym }}</span>
     <p>Location: {{ gym.location }}</p>
@@ -17,29 +15,29 @@
     </div>
   </div>
 
-  <div>
-    <p>Trainers:</p>
+  <div class="card-content">
+    <p class="card-title">Trainers:</p>
+    {% if request.user == gym.user %}
+    <a href="{% url 'trainer_create'%}">Add Trainer</a>
+    {% endif %}
     <ul>
       {% for trainer in trainers %}
-          <li>
-              <h3>{{ trainer.name }}</h3>
-              {% load static %}
-              <img src="{% static trainer.image|cut:'main_app/static/'%}" style="width: 100px;">
-          </li>
+      <a href="{% url 'trainer_detail' trainer.id %}">
+        <li>
+          <h3>{{ trainer.name }}</h3>
+          {% load static %}
+          <img
+            src="{% static trainer.image|cut:'main_app/static/'%}"
+            style="width: 100px"
+          />
+        </li>
+      </a>
+
       {% empty %}
-          <p>No trainers available for this gym.</p>
+      <p>No trainers available for this gym.</p>
       {% endfor %}
-  </ul>
+    </ul>
   </div>
-    
 </div>
 
-
-
-
-
 {% endblock %}
-
-
-
-

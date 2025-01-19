@@ -1,0 +1,22 @@
+{% extends 'base.html' %} {% block content %}
+<div>
+  <div>
+    {% load static %}
+    <img
+      src="{% static trainer.image|cut:'main_app/static/'%}"
+      style="width: 100px"
+    />
+  </div>
+
+  <div>
+    <h1>Meet {{trainer.name}}!</h1>
+    <h5>{{trainer.specialties}}</h5>
+    <h3>{{trainer.description}}</h3>
+  </div>
+  {% if request.user == trainer.gym.user %}
+  <a href="{% url 'trainer_update' trainer.id %}">Edit</a>
+  <a href="{% url 'trainer_delete' trainer.id %}">Delete</a>
+  {% endif %}
+</div>
+
+{% endblock %}
