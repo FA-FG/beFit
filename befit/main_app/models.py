@@ -37,12 +37,11 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-  
+
 
 
 
 # Gyn Model
-
 class Gym(models.Model):
     gym = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
@@ -50,6 +49,7 @@ class Gym(models.Model):
     description = models.CharField()
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # trainer = models.ForeignKey(Trainer, on_delete = models.CASCADE)
 
     # direct the user to newly created page
     def get_absolute_url(self):
@@ -58,6 +58,17 @@ class Gym(models.Model):
 
     def __str__(self):
         return self.gym
+
+
+class Trainer(models.Model):
+    name = models.CharField(max_length=50)
+    age = models.IntegerField()
+    image = models.ImageField(upload_to='main_app/static/uploads/', default="")
+    description = models.CharField(max_length=250)
+    gym = models.ForeignKey(Gym, on_delete = models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 class Session(models.Model):
