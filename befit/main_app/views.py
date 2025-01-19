@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
 
 
-from .models import Profile
+from .models import Profile, Trainer
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.forms import UserCreationForm
@@ -38,9 +38,24 @@ class ProfileCreate(CreateView):
 
 
 class ProfileUpdate(UpdateView):
-    model = Profile
+    model = Profile 
     fields = ['age','weight','height', 'image']
     success_url = '/profile/'
+
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+
+        # get the password
+        password = self.request.POST.get('password', None)
+
+        if password: #if there is a password
+            user = profile.user  # Get the User
+            user.set_password(password)  # change the pw to the new one + hash it
+            user.save()
+
+        profile.save()  # SaveProfile
+        return redirect(self.success_url)  # Redirect to /profile/
+
 
 # Create your views here.
 
@@ -136,7 +151,10 @@ def gyms_detail(request, gym_id):
     gym = Gym.objects.get(id=gym_id)
     # feeding_form = FeedingForm
     # toys_cat_doesnt_have = Toy.objects.exclude(id__in = cat.toys.all().values_list('id'))
-    return render(request,'gyms/detail.html', {'gym' : gym })
+    
+    trainers = Trainer.objects.filter(gym=gym)
+
+    return render(request,'gyms/detail.html', {'gym' : gym, 'trainers': trainers })
 
 
 
@@ -160,3 +178,5 @@ def signup(request):
 @login_required
 def profile(request):
     return render(request, 'profile.html')
+
+
