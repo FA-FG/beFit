@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import  LoginRequiredMixin
-from .models import Gym,Session,Subscription, SubscriptionPackage, Profile
+from .models import Gym,Session,Subscription, SubscriptionPackage, Profile, Trainer
 from django.views.generic.edit import CreateView, UpdateView,DeleteView
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy

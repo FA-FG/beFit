@@ -81,7 +81,7 @@ class Session(models.Model):
     avalibility = models.BooleanField(default=True)
     price = models.FloatField(default=0.0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+
 
 
     def get_absolute_url(self):
