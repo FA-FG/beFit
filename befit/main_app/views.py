@@ -3,19 +3,83 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import  LoginRequiredMixin
-from .models import Gym,Session
+from .models import Gym,Session,Subscription, SubscriptionPackage, Profile
 from django.views.generic.edit import CreateView, UpdateView,DeleteView
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
 
+from django.utils import timezone
+from datetime import timedelta
 
-from .models import Profile, Trainer
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic import ListView, DetailView
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages  # Import messages framework
+
+from django.contrib import messages  # Import messages framework
+
+@login_required
+def subscribe_to_package(request, package_id):
+    # Get the user's profile to check their type
+    user_profile = Profile.objects.get(user=request.user)
+    
+    # Check if the user already has an active subscription
+    active_subscription = Subscription.objects.filter(user=request.user, status='Active').exists()
+
+    if active_subscription:
+        # Notify the user that they already have an active subscription
+        messages.warning(request, "You already have an active subscription. Please wait for it to expire before subscribing to a new one.")
+        
+        # Filter packages based on user type (RU or GO)
+        if user_profile.type == 'GO':  # Gym owner
+            packages = SubscriptionPackage.objects.filter(user_type='GO')
+        else:  # Regular user
+            packages = SubscriptionPackage.objects.filter(user_type='RU')
+        
+        # Render the page with the filtered packages and the message
+        return render(request, 'main_app/subscription_package_list.html', {'packages': packages})
+    
+    # If no active subscription, proceed with subscription creation
+    package = SubscriptionPackage.objects.get(id=package_id)  # Get the selected package
+    
+    # Calculate the subscription's end date based on the package duration
+    start_date = timezone.now().date()
+    end_date = start_date + timedelta(days=package.duration_days)
+    
+    # Create the subscription for the logged-in user
+    Subscription.objects.create(
+        package=package,
+        startDate=start_date,
+        endDate=end_date,
+        user=request.user,
+        status="Active"
+    )
+    
+    # Notify the user of successful subscription
+    messages.success(request, f"Successfully subscribed to {package.name}!")
+    
+    # After successful subscription, show the list of subscriptions
+    return redirect('view_my_subscriptions')  # Redirect to the list of subscriptions
 
 
-# from .models import Class
+@login_required
+def subscription_package_list(request):
+    user_profile = Profile.objects.get(user=request.user)  # Get the logged-in user's profile
+
+    if user_profile.type == 'GO':  # Gym owner
+        # Show only gym owner packages
+        packages = SubscriptionPackage.objects.filter(user_type='GO')
+    else:  # Regular user
+        # Show only regular user packages
+        packages = SubscriptionPackage.objects.filter(user_type='RU')
+
+    return render(request, 'main_app/subscription_package_list.html', {'packages': packages})
+
+
+@login_required
+def view_my_subscriptions(request):
+    subscriptions = Subscription.objects.filter(user=request.user)  # Filter subscriptions by the logged-in user
+    return render(request, 'main_app/my_subscriptions.html', {'subscriptions': subscriptions})
+
+
+
 class ProfileCreate(CreateView):
     model = Profile
     fields = ['age', 'gender', 'type', 'weight', 'height', 'image']
@@ -36,11 +100,11 @@ class ProfileCreate(CreateView):
 
 
 
-
 class ProfileUpdate(UpdateView):
     model = Profile 
     fields = ['age','weight','height', 'image']
     success_url = '/profile/'
+
 
     def form_valid(self, form):
         profile = form.save(commit=False)
@@ -57,7 +121,6 @@ class ProfileUpdate(UpdateView):
         return redirect(self.success_url)  # Redirect to /profile/
 
 
-# Create your views here.
 
 
 class GymCreate(LoginRequiredMixin, CreateView):

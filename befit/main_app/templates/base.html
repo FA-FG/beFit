@@ -26,13 +26,18 @@
         <ul class="right">
           <li><a href="{% url 'about' %}">About</a></li>
           
-         
           {% if user.is_authenticated %}
           <li><a href="{% url 'profile' %}">Profile</a></li>
           <li><a href="{% url 'index' %}">View All Gyms</a></li>
           <!-- <li><a href="{% url 'gyms_create' %}">Add a gym</a></li> -->
           <li><a href="{% url 'session_create' %}">Add a Session</a></li>
           <li><a href="{% url 'session_index' %}">View all Sessions</a></li>
+      
+
+         <li><a href="{% url 'view_my_subscriptions' %}">View My Subscriptions</a></li>
+         <li><a href="{% url 'subscription_package_list' %}">Subscription</a></li>
+
+
           <form action="{% url 'logout' %}" method="post">
 
             {% csrf_token %}
@@ -68,3 +73,4 @@
   
 </body>
 </html>
+

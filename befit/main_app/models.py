@@ -89,3 +89,38 @@ class Session(models.Model):
     def __str__(self):
         return self.name
         
+
+
+
+
+class SubscriptionPackage(models.Model):
+    USER_TYPE_CHOICES = [
+        ('RU', 'Regular User'),
+        ('GO', 'Gym Owner'),
+    ]
+    
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+    duration_days = models.IntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    user_type = models.CharField(max_length=2, choices=USER_TYPE_CHOICES,default="RU")   
+
+    def __str__(self):
+        return f"{self.name} ({self.duration_days} days, {self.get_user_type_display()})"
+
+    def get_absolute_url(self):
+        return reverse('subscription_package_detail', kwargs={'pk': self.id})
+
+
+class Subscription(models.Model):
+    package = models.ForeignKey(SubscriptionPackage, on_delete=models.CASCADE)
+    startDate = models.DateField()
+    endDate = models.DateField()
+    status = models.CharField(max_length=20, default="Not Active")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.package.name} for {self.user.username}"
+
+    def get_absolute_url(self):
+        return reverse('subscription_detail', kwargs={'pk': self.id})  # Fix this to return a string
