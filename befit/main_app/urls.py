@@ -50,6 +50,13 @@ urlpatterns = [
 
     path('session/<int:session_id>/unassoc_trainer/<int:trainer_id>/', views.unassoc_trainer, name='unassoc_trainer'),
 
+    #Registration
+    path('register/<int:session_id>/', views.register_for_session, name='register_for_session'),
+    path('my-registrations/', views.view_my_registrations, name='view_my_registrations'),
+    path('register/<int:pk>/update', views.RegisterUpdate.as_view(), name="register_update"),
+    
+
+
 
     
 ]

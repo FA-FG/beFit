@@ -17,7 +17,23 @@
       </div>
       {% endif %}
     </div>
+   
+    <!-- Registration Button -->
+    {% if not user in session.registrations.all %}
+    <div class="card-action">
+      <form action="{% url 'register_for_session' session.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn">Register</button>
+      </form>
+    </div>
+    {% else %}
+    <div class="card-action">
+      <span>You are already registered for this session.</span>
+    </div>
+    {% endif %}
   </div>
+
+
 
   <div class="row right">
     <div class="cl s6">

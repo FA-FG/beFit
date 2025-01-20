@@ -13,6 +13,15 @@ USER_TYPES = (
     ('GO', 'GYM Owner')
 )
 
+STATUS_TYPE = (
+    ('PE', "Pending"),
+    ('CA', "Canceled"),
+    ('PA', "Paid"),
+    ('NP', "Not Paid"),
+    ('CO', "Completed"),
+    ('RE', "Registered")
+)
+
 # Create your models here.
 
 # Profile Model 
@@ -126,3 +135,15 @@ class Subscription(models.Model):
 
     def get_absolute_url(self):
         return reverse('subscription_detail', kwargs={'pk': self.id})  # Fix this to return a string
+
+class Registration(models.Model):
+        session = models.ForeignKey(Session,on_delete=models.CASCADE, default=1)
+        user = models.ForeignKey(User, on_delete=models.CASCADE)
+        date_registered = models.DateField()
+        status = models.CharField(max_length=2, choices=STATUS_TYPE, default=STATUS_TYPE[0][0])
+        comment = models.CharField(default="", max_length=250)
+
+        def __str__(self):
+            return self.name
+
+
