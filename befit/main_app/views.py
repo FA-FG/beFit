@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import  LoginRequiredMixin
-from .models import Gym,Session,Subscription, SubscriptionPackage, Profile
+from .models import Gym,Session,Subscription, SubscriptionPackage, Profile, Trainer, Registration
 from django.views.generic.edit import CreateView, UpdateView,DeleteView
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
@@ -14,6 +14,8 @@ from datetime import timedelta
 from django.contrib import messages  # Import messages framework
 
 from django.contrib import messages  # Import messages framework
+
+from django.utils import timezone
 
 @login_required
 def subscribe_to_package(request, package_id):
@@ -73,6 +75,48 @@ def subscription_package_list(request):
     return render(request, 'main_app/subscription_package_list.html', {'packages': packages})
 
 
+# register views
+@login_required
+def register_for_session(request, session_id):
+    session = Session.objects.filter(id=session_id).first()
+
+    # If the session doesn't exist, redirect to the session list
+    if not session:
+        return redirect('session_list')
+
+    # Check if the user is already registered for the session
+    if Registration.objects.filter(user=request.user, session=session).exists():
+        return redirect('session_detail', session_id=session.id)
+
+    # Create a new registration
+    Registration.objects.create(
+        session=session,
+        user=request.user,
+        date_registered=timezone.now().date()
+    )
+
+    # Redirect the user to the list of their registrations
+    return redirect('view_my_registrations')
+
+
+@login_required
+def view_my_registrations(request):
+    user_profile = request.user.profile
+    
+    # Check if the user is a Gym Owner (GO) or a Regular User (NU)
+    if user_profile.type == 'GO':
+        # If Gym Owner, show all registrations
+        registrations = Registration.objects.all()
+    else:
+        # If Regular User, show only their registrations
+        registrations = Registration.objects.filter(user=request.user)
+
+    return render(request, 'main_app/my_registrations.html', {'registrations': registrations})
+
+
+
+
+# subscription view
 @login_required
 def view_my_subscriptions(request):
     subscriptions = Subscription.objects.filter(user=request.user)  # Filter subscriptions by the logged-in user
@@ -250,6 +294,20 @@ class TrainerDelete(LoginRequiredMixin, DeleteView):
         return f'/gyms/{gym_id}/'
 
 
+
+class RegisterUpdate(LoginRequiredMixin, UpdateView):
+    model = Registration
+    fields = ['status','comment']
+    
+    
+    template_name = 'main_app/registration_form.html'  # Update this line to match your actual template name
+
+    def form_valid(self, form):
+        form.save()
+        return redirect('view_my_registrations')
+
+
+
 def home(request):
     return render(request,'home.html')
 
@@ -318,5 +376,3 @@ def unassoc_trainer(request, session_id, trainer_id):
     session.trainers.remove(trainer)
     
     return redirect('session_detail', pk=session_id) 
-
-

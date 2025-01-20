@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if request.user.profile.type == 'GO' %}
+<h2>All Registrations</h2>
+{% else %}
+<h2>Your Registrations</h2>
+{% endif %}
+<table>
+    <thead>
+        <tr>
+          <th>User</th>
+            <th>Session Name</th>
+            <th>Date Registered</th>
+            <th>Status</th>
+            <th>Comments</th>
+            {% if request.user.profile.type == 'GO' %}
+            <th>Edit Statues</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for registration in registrations %}
+        <tr>
+            <td>{{registration.user.username}}</td>
+            <td>{{ registration.session.name }}</td>
+            <td>{{ registration.date_registered }}</td>
+            <td>{{ registration.get_status_display }}</td>
+            <td>{{ registration.comment }}</td>
+            {% if request.user.profile.type == 'GO' %}
+            <td><a href="{% url 'register_update' registration.id  %}">Edit</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
