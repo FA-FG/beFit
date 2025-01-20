@@ -16,6 +16,22 @@
       <a href="{% url 'gyms_delete' gym.id %}">Delete</a>
     </div>
   </div>
+
+  <div>
+    <p>Trainers:</p>
+    <ul>
+      {% for trainer in trainers %}
+          <li>
+              <h3>{{ trainer.name }}</h3>
+              {% load static %}
+              <img src="{% static trainer.image|cut:'main_app/static/'%}" style="width: 100px;">
+          </li>
+      {% empty %}
+          <p>No trainers available for this gym.</p>
+      {% endfor %}
+  </ul>
+  </div>
+    
 </div>
 
 

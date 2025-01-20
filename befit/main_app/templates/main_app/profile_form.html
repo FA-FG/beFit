@@ -6,6 +6,12 @@
 
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %} {{ form.as_p }}
+   <!-- Password field -->
+
+   {% if object %}
+   <label for="password">New Password (leave blank if not changing):</label>
+   <input type="password" name="password" id="password">
+   {% endif %}
   <button type="submit">Submit</button>
 </form>
 
@@ -13,6 +19,9 @@
 <script>
   let selectEl = document.getElementById('id_type')
   M.FormSelect.init(selectEl)
+
+  let selectEl2 = document.getElementById('id_gender')
+  M.FormSelect.init(selectEl2)
 </script>
 
 {% endblock %}
