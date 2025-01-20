@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Subscriptions{% endblock %}
+
+{% block content %}
+    <h1>Your Subscriptions</h1>
+
+    <ul>
+        {% for subscription in subscriptions %}
+            <li>
+                <strong>{{ subscription.package.name }}</strong>
+                <br>Start Date: {{ subscription.startDate }}
+                <br>End Date: {{ subscription.endDate }}
+                <br>Status: {{ subscription.status }}
+            </li>
+        {% empty %}
+            <p>You have no active subscriptions.</p>
+        {% endfor %}
+    </ul>
+{% endblock %}

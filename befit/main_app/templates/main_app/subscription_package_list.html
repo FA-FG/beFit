@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Available Subscription Packages{% endblock %}
+
+{% block content %}
+    <h1>Available Subscription Packages</h1>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <ul>
+        {% for package in packages %}
+            <li>
+                <h3>{{ package.name }} - ${{ package.price }}</h3>
+                <p>{{ package.description }}</p>
+                <p><strong>Duration:</strong> {{ package.duration_days }} days</p>
+                <form method="post" action="{% url 'subscribe_to_package' package_id=package.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Subscribe Now</button>
+                </form>
+            </li>
+        {% empty %}
+            <p>No packages available for your type.</p>
+        {% endfor %}
+    </ul>
+{% endblock %}
