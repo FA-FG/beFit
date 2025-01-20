@@ -10,13 +10,78 @@
         <span class="card-title">{{ session.name }}</span>
         <p>location: {{ session.location }}</p>
       </div>
-
+      {% if request.user == session.user %}
       <div class="card-action">
         <a href="{% url 'session_update' session.id %}">Edit</a>
         <a href="{% url 'session_delete' session.id %}">Delete</a>
       </div>
-
+      {% endif %}
     </div>
   </div>
+
+  <div class="row right">
+    <div class="cl s6">
+      <h3>Trainers</h3>
+      {% if session.trainers.count %}
+        {% for trainer in session.trainers.all %}
+          <div class="card">
+            <div class="card-content">
+              <a href="{% url 'trainer_detail' trainer.id %}">
+                <span class="card-title"> {{trainer.name}}</span>
+                {% load static %}
+                <img
+                src="{% static trainer.image|cut:'main_app/static/'%}"
+                style="width: 100px"
+              />
+              </a>
+              <div class="card-action">
+                {% if request.user == session.user %}
+                <form action="{% url 'unassoc_trainer' session.id trainer.id %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn">Delete</button>
+                </form>
+                {% endif %}
+              </div>
+            </div>
+            
+          </div>
+          
+        {% endfor %}
+        {% else %}
+          <h5>No Trainers Available</h5>
+
+      {% endif %}
+    </div>
+
+  </div>
+  {% if request.user == session.user %}
+  <div class="col s6">
+    <h3>Trainers List</h3>
+
+    {% if trainers.count %}
+      {% for trainer in trainers %}
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">
+            {{ trainer.name }}
+          </span>
+          
+        </div>
+        
+        <div class="card-action">
+          <form action="{% url 'assoc_trainer' session.id trainer.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn">Add</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <h5>{{ trainer.name }} already has all trainers available.</h5>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+
 </div>
 {% endblock %}

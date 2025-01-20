@@ -64,6 +64,7 @@ class Trainer(models.Model):
     name = models.CharField(max_length=50)
     age = models.IntegerField()
     image = models.ImageField(upload_to='main_app/static/uploads/', default="")
+    specialties = models.CharField(max_length=100, default="No Specialty Specified")
     description = models.CharField(max_length=250)
     gym = models.ForeignKey(Gym, on_delete = models.CASCADE)
 
@@ -76,10 +77,11 @@ class Session(models.Model):
     location = models.CharField(max_length=20)
     time = models.CharField(max_length=50)
     date = models.CharField(max_length=20)
-    trainer = models.CharField(max_length=50)
+    trainers = models.ManyToManyField(Trainer)
     avalibility = models.BooleanField(default=True)
     price = models.FloatField(default=0.0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
 
 
     def get_absolute_url(self):

@@ -162,13 +162,37 @@ class SessionList(LoginRequiredMixin, ListView):
             return Session.objects.filter(user=self.request.user)
 
 
+
 class SessionDetail(LoginRequiredMixin, DetailView):
     model = Session
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        session = self.get_object()  # This gets the session object from the view's context
+
+        
+        user = session.user
+        profile = user.profile  
+
+        if profile.type == 'GO': # if gym owner
+            gym = Gym.objects.filter(user=user).first()  # Get the gym associated with the user (gym owner)
+            
+            if gym:
+                # Filter trainers that belong to the gym
+                trainers = Trainer.objects.filter(gym=gym).exclude(id__in = session.trainers.all().values_list('id'))
+            else:
+                trainers = []  # no trainers
+        else:
+            trainers = []  # If the user is not a gym owner, no trainers should be listed
+
+        context['trainers'] = trainers
+        return context
+
 
 
 class SessionCreate(LoginRequiredMixin, CreateView):
     model = Session
-    fields = ['name','location', 'time','date','trainer','price', 'avalibility']
+    fields = ['name','location', 'time','date','price', 'avalibility']
 
     def form_valid(self, form):
         # Set the user to the currently authenticated user
@@ -182,7 +206,8 @@ class SessionCreate(LoginRequiredMixin, CreateView):
 
 class SessionUpdate(LoginRequiredMixin, UpdateView):
     model = Session
-    fields = ['location', 'time','date','trainer','price']
+    fields = ['location', 'time','date','price']
+    
 
 
 class SessionDelete(LoginRequiredMixin, DeleteView):
@@ -190,6 +215,39 @@ class SessionDelete(LoginRequiredMixin, DeleteView):
     success_url = '/session/'
 
 
+
+# trainer
+class TrainerDetail(LoginRequiredMixin, DetailView):
+    model = Trainer
+    fields = "__all__"
+
+class TrainerCreate(LoginRequiredMixin, CreateView):
+    model = Trainer
+    fields = ['name', 'age', 'image', 'specialties', 'description']
+
+    def form_valid(self, form):
+        form.instance.gym = Gym.objects.get(user=self.request.user)
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return f'/gyms/{self.object.gym.id}/'
+
+
+class TrainerUpdate(LoginRequiredMixin, UpdateView):
+    model = Trainer
+    fields = ['name', 'age', 'image', 'specialties', 'description']
+    
+    def get_success_url(self):
+        gym_id = self.object.gym.id 
+        return f'/gyms/{gym_id}/'
+
+class TrainerDelete(LoginRequiredMixin, DeleteView):
+    model = Trainer
+    success_url = '/trainer/'
+
+    def get_success_url(self):
+        gym_id = self.object.gym.id 
+        return f'/gyms/{gym_id}/'
 
 
 def home(request):
@@ -212,12 +270,14 @@ def class_index(request):
 @login_required
 def gyms_detail(request, gym_id):
     gym = Gym.objects.get(id=gym_id)
-    # feeding_form = FeedingForm
-    # toys_cat_doesnt_have = Toy.objects.exclude(id__in = cat.toys.all().values_list('id'))
     
+    profile = request.user.profile
+
     trainers = Trainer.objects.filter(gym=gym)
 
-    return render(request,'gyms/detail.html', {'gym' : gym, 'trainers': trainers })
+    
+
+    return render(request,'gyms/detail.html', {'gym' : gym, 'trainers': trainers, 'profile': profile })
 
 
 
@@ -241,5 +301,22 @@ def signup(request):
 @login_required
 def profile(request):
     return render(request, 'profile.html')
+
+
+# added assoc and unassoc between trainer and session
+
+def assoc_trainer(request, session_id, trainer_id):
+    session = Session.objects.get(id=session_id)
+    trainer = Trainer.objects.get(id=trainer_id)
+    session.trainers.add(trainer)
+    
+    return redirect('session_detail', pk=session_id) 
+
+def unassoc_trainer(request, session_id, trainer_id):
+    session = Session.objects.get(id=session_id)
+    trainer = Trainer.objects.get(id=trainer_id)
+    session.trainers.remove(trainer)
+    
+    return redirect('session_detail', pk=session_id) 
 
 

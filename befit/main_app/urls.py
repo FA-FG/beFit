@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import profile
+from .views import profile, Trainer
 
 
 
@@ -39,6 +39,16 @@ urlpatterns = [
     path('session/<int:pk>/update/', views.SessionUpdate.as_view(), name='session_update'),
     path('session/<int:pk>/delete/', views.SessionDelete.as_view(), name='session_delete'),
 
+    # trainer
+    path('trainer/<int:pk>/', views.TrainerDetail.as_view(), name="trainer_detail"),
+    path('trainer/create/', views.TrainerCreate.as_view(), name="trainer_create"),
+    path('trainer/<int:pk>/update/', views.TrainerUpdate.as_view(), name="trainer_update"),
+    path('trainer/<int:pk>/delete/', views.TrainerDelete.as_view(), name="trainer_delete"),
+
+    #associate a trainer with a session (M:M)
+    path('session/<int:session_id>/assoc_trainer/<int:trainer_id>/', views.assoc_trainer, name='assoc_trainer'),
+
+    path('session/<int:session_id>/unassoc_trainer/<int:trainer_id>/', views.unassoc_trainer, name='unassoc_trainer'),
 
 
     
