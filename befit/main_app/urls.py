@@ -39,5 +39,10 @@ urlpatterns = [
     path('trainer/<int:pk>/update/', views.TrainerUpdate.as_view(), name="trainer_update"),
     path('trainer/<int:pk>/delete/', views.TrainerDelete.as_view(), name="trainer_delete"),
 
+    #associate a trainer with a session (M:M)
+    path('session/<int:session_id>/assoc_trainer/<int:trainer_id>/', views.assoc_trainer, name='assoc_trainer'),
+
+    path('session/<int:session_id>/unassoc_trainer/<int:trainer_id>/', views.unassoc_trainer, name='unassoc_trainer'),
+
     
 ]

@@ -30,8 +30,11 @@
           {% if user.is_authenticated %}
           <li><a href="{% url 'profile' %}">Profile</a></li>
           <li><a href="{% url 'index' %}">View All Gyms</a></li>
+          
+          {% if user.profile.type == 'GO' %}
           <!-- <li><a href="{% url 'gyms_create' %}">Add a gym</a></li> -->
           <li><a href="{% url 'session_create' %}">Add a Session</a></li>
+          {% endif %}
           <li><a href="{% url 'session_index' %}">View all Sessions</a></li>
           <form action="{% url 'logout' %}" method="post">
 

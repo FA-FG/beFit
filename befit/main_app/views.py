@@ -99,13 +99,37 @@ class SessionList(LoginRequiredMixin, ListView):
             return Session.objects.filter(user=self.request.user)
 
 
+
 class SessionDetail(LoginRequiredMixin, DetailView):
     model = Session
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        session = self.get_object()  # This gets the session object from the view's context
+
+        
+        user = session.user
+        profile = user.profile  
+
+        if profile.type == 'GO': # if gym owner
+            gym = Gym.objects.filter(user=user).first()  # Get the gym associated with the user (gym owner)
+            
+            if gym:
+                # Filter trainers that belong to the gym
+                trainers = Trainer.objects.filter(gym=gym).exclude(id__in = session.trainers.all().values_list('id'))
+            else:
+                trainers = []  # no trainers
+        else:
+            trainers = []  # If the user is not a gym owner, no trainers should be listed
+
+        context['trainers'] = trainers
+        return context
+
 
 
 class SessionCreate(LoginRequiredMixin, CreateView):
     model = Session
-    fields = ['name','location', 'time','date','trainer','price', 'avalibility']
+    fields = ['name','location', 'time','date','price', 'avalibility']
 
     def form_valid(self, form):
         # Set the user to the currently authenticated user
@@ -119,7 +143,8 @@ class SessionCreate(LoginRequiredMixin, CreateView):
 
 class SessionUpdate(LoginRequiredMixin, UpdateView):
     model = Session
-    fields = ['location', 'time','date','trainer','price']
+    fields = ['location', 'time','date','price']
+    
 
 
 class SessionDelete(LoginRequiredMixin, DeleteView):
@@ -213,5 +238,22 @@ def signup(request):
 @login_required
 def profile(request):
     return render(request, 'profile.html')
+
+
+# added assoc and unassoc between trainer and session
+
+def assoc_trainer(request, session_id, trainer_id):
+    session = Session.objects.get(id=session_id)
+    trainer = Trainer.objects.get(id=trainer_id)
+    session.trainers.add(trainer)
+    
+    return redirect('session_detail', pk=session_id) 
+
+def unassoc_trainer(request, session_id, trainer_id):
+    session = Session.objects.get(id=session_id)
+    trainer = Trainer.objects.get(id=trainer_id)
+    session.trainers.remove(trainer)
+    
+    return redirect('session_detail', pk=session_id) 
 
 
