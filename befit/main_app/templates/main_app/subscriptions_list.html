@@ -5,22 +5,28 @@
 {% block title %}Manage Subscription Packages{% endblock %}
 
 {% block content %}
-    <h1>Manage Subscription Packages</h1>
+    <main class="container">
+        <h1 class="gym-details-header">Manage Subscription Packages</h1>
 
-    <a href="{% url 'subscription_package_create' %}" class="btn btn-primary">Create New Package</a>
+        <a href="{% url 'subscription_package_create' %}" class="subscribe-button">Create New Package</a>
 
-    <ul>
-        {% for package in packages %}
-            <li>
-                <h3>{{ package.name }} ({{ package.duration_days }} days)</h3>
-                <p>{{ package.description }}</p>
-                <p><strong>Price:</strong> ${{ package.price }}</p>
-                <p><strong>User Type:</strong> {{ package.get_user_type_display }}</p>
-                <a href="{% url 'subscription_package_edit' package.id %}">Edit</a>
-                <a href="{% url 'subscription_package_delete' package.id %}">Delete</a>
-            </li>
-        {% empty %}
-            <p>No subscription packages available.</p>
-        {% endfor %}
-    </ul>
+        <div class="package-list">
+            {% for package in packages %}
+                <div class="package-item">
+                    <h3 class="package-name">{{ package.name }} ({{ package.duration_days }} days)</h3>
+                    <p class="package-description">{{ package.description }}</p>
+                    <p><strong>Price:</strong> ${{ package.price }}</p>
+                    <p><strong>User Type:</strong> {{ package.get_user_type_display }}</p>
+                    
+                    <div class="package-actions">
+                        <a href="{% url 'subscription_package_edit' package.id %}" class="edit-link">Edit</a>
+                        <a href="{% url 'subscription_package_delete' package.id %}" class="edit-link">Delete</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No subscription packages available.</p>
+            {% endfor %}
+        </div>
+    </main>
 {% endblock %}
+

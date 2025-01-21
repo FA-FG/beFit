@@ -1,17 +1,17 @@
 {% extends 'base.html' %} {% block content %}
-<div>
+<div class="trainer-page">
   <div>
     {% load static %}
     <img
       src="{% static trainer.image|cut:'main_app/static/'%}"
-      style="width: 100px"
+      style="width: 250px"
     />
   </div>
 
-  <div>
-    <h1>Meet {{trainer.name}}!</h1>
-    <h5>{{trainer.specialties}}</h5>
-    <h3>{{trainer.description}}</h3>
+  <div class="trainer-info">
+    <h1 class="trainers">Meet {{trainer.name}}!</h1>
+    <h5 class="trainers">{{trainer.specialties}}</h5>
+    <h3 class="trainers">{{trainer.description}}</h3>
   </div>
   {% if request.user == trainer.gym.user %}
   <a href="{% url 'trainer_update' trainer.id %}">Edit</a>

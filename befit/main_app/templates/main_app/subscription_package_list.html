@@ -3,32 +3,35 @@
 {% block title %}Available Subscription Packages{% endblock %}
 
 {% block content %}
-    <h1>Available Subscription Packages</h1>
+    <div class="subscription-container">
+        <h1 class="subscription-title">Available Subscription Packages</h1>
 
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <ul class="package-list">
+            {% for package in packages %}
+                <li class="package-item">
+                    <h3 class="package-name">{{ package.name }} - ${{ package.price }}</h3>
+                    <p class="package-description">{{ package.description }}</p>
+                    <p><strong>Duration:</strong> {{ package.duration_days }} days</p>
+                    <form method="post" action="{% url 'subscribe_to_package' package_id=package.id %}" class="subscribe-form">
+                        {% csrf_token %}
+                        <button type="submit" class="subscribe-button">Subscribe Now</button>
+                    </form>
+                </li>
+            {% empty %}
+                <p>No packages available for your type.</p>
             {% endfor %}
-        </div>
-    {% endif %}
-
-    <ul>
-        {% for package in packages %}
-            <li>
-                <h3>{{ package.name }} - ${{ package.price }}</h3>
-                <p>{{ package.description }}</p>
-                <p><strong>Duration:</strong> {{ package.duration_days }} days</p>
-                <form method="post" action="{% url 'subscribe_to_package' package_id=package.id %}">
-                    {% csrf_token %}
-                    <button type="submit">Subscribe Now</button>
-                </form>
-            </li>
-        {% empty %}
-            <p>No packages available for your type.</p>
-        {% endfor %}
-    </ul>
+        </ul>
+    </div>
 {% endblock %}
+
 

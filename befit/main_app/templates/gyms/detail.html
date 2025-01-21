@@ -1,9 +1,34 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
 
 <h1>Gym Details</h1>
+<div class="trainer-header">
+  <h3>Trainers</h3>
+  
+    <ul>
+      {% for trainer in trainers %}
+      <a href="{% url 'trainer_detail' trainer.id %}">
+        <li>
+         <div class="trainer-picture">
+          {% load static %}
+          
+          <img
+            src="{% static trainer.image|cut:'main_app/static/' %}"
+            style="width: 100px"
+          />
+        </li>
+      </a>
+      {% empty %}
+      <p>No trainers available for this gym.</p>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+
 
 <div class="card">
-  <div class="card-content ">
+  <div class="card-content">
     <span class="card-title">{{ gym.gym }}</span>
     <p>Location: {{ gym.location }}</p>
     <p>Description: {{ gym.description }}</p>
@@ -14,32 +39,20 @@
       <a href="{% url 'gyms_update' gym.id %}">Edit</a>
       <a href="{% url 'gyms_delete' gym.id %}">Delete</a>
     </div>
-  </div>
-  {% endif %}
-
-  <div class="card-content right">
-    <p class="card-title">Trainers:</p>
-    {% if request.user == gym.user %}
-    <a href="{% url 'trainer_create'%}">Add Trainer</a>
     {% endif %}
-    <ul>
-      {% for trainer in trainers %}
-      <a href="{% url 'trainer_detail' trainer.id %}">
-        <li>
-          <h3>{{ trainer.name }}</h3>
-          {% load static %}
-          <img
-            src="{% static trainer.image|cut:'main_app/static/'%}"
-            style="width: 100px"
-          />
-        </li>
-      </a>
+  </div>
 
-      {% empty %}
-      <p>No trainers available for this gym.</p>
-      {% endfor %}
-    </ul>
+
+    
+    <div class="below">
+      {% if request.user == gym.user %}
+      <a href="{% url 'trainer_create' %}">Add Trainer</a>
+      {% endif %}
+  
+    
   </div>
 </div>
 
 {% endblock %}
+
+
