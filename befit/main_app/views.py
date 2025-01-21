@@ -17,6 +17,36 @@ from django.contrib import messages  # Import messages framework
 
 from django.utils import timezone
 
+
+
+
+# List View - To display all subscription packages
+class SubscriptionPackageListView(ListView):
+    model = SubscriptionPackage
+    template_name = 'main_app/subscriptions_list.html'
+    context_object_name = 'packages'
+
+# Create View - To create a new subscription package
+class SubscriptionPackageCreateView(CreateView):
+    model = SubscriptionPackage
+    template_name = 'main_app/subscription_package_form.html'
+    fields = ['name', 'description', 'duration_days', 'price', 'user_type']
+    success_url = reverse_lazy('subscription_package_list')  # Redirect to the list page after creation
+
+# Update View - To update an existing subscription package
+class SubscriptionPackageUpdateView(UpdateView):
+    model = SubscriptionPackage
+    template_name = 'main_app/subscription_package_form.html'
+    fields = ['name', 'description', 'duration_days', 'price', 'user_type']
+    success_url = reverse_lazy('subscription_package_list')  # Redirect to the list page after updating
+
+# Delete View - To delete a subscription package
+class SubscriptionPackageDeleteView(DeleteView):
+    model = SubscriptionPackage
+    template_name = 'main_app/subscription_package_confirm_delete.html'
+    success_url = reverse_lazy('subscription_package_list')  # Redirect to the list page after deletion
+
+
 @login_required
 def subscribe_to_package(request, package_id):
     # Get the user's profile to check their type

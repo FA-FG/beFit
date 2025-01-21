@@ -41,6 +41,9 @@
          <li><a href="{% url 'subscription_package_list' %}">Subscription</a></li>
          <li><a href="{% url 'view_my_registrations' %}">Registrations</a></li>
 
+         {% if user.is_superuser %}
+         <li><a href="{% url 'subscription_list' %}">Managa Subscription</a></li>
+         {% endif %}
 
           <form action="{% url 'logout' %}" method="post">
 

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Create / Edit Subscription Package{% endblock %}
+
+{% block content %}
+    <h1>{% if object %}Edit{% else %}Create{% endif %} Subscription Package</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">{% if object %}Update{% else %}Create{% endif %}</button>
+    </form>
+
+    <a href="{% url 'subscription_package_list' %}">Back to Package List</a>
+{% endblock %}
+
