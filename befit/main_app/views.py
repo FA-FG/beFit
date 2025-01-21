@@ -61,7 +61,7 @@ def subscribe_to_package(request, package_id):
         if user_profile.type == 'GO':  # Gym owner
             packages = SubscriptionPackage.objects.filter(user_type='GO')
         else:  # Regular user
-            packages = SubscriptionPackage.objects.filter(user_type='RU')
+            packages = SubscriptionPackage.objects.filter(user_type='NU')
         
         # Render the page with the filtered packages and the message
         return render(request, 'main_app/subscription_package_list.html', {'packages': packages})
@@ -104,7 +104,7 @@ def subscription_package_list(request):
         packages = SubscriptionPackage.objects.filter(user_type='GO')
     else:  # Regular user
         # Show only regular user packages
-        packages = SubscriptionPackage.objects.filter(user_type='RU')
+        packages = SubscriptionPackage.objects.filter(user_type='NU')
 
     return render(request, 'main_app/subscription_package_list.html', {'packages': packages})
 
@@ -132,8 +132,8 @@ def subscription_package_list(request):
 #     # Redirect the user to the list of their registrations
 #     return redirect('view_my_registrations')
 
-@login_required
 def register_for_session(request, session_id):
+    # Retrieve the session
     session = Session.objects.filter(id=session_id).first()
 
     # If the session doesn't exist, redirect to the session list
@@ -155,16 +155,25 @@ def register_for_session(request, session_id):
         messages.info(request, "You are already registered for this session.")
         return redirect('session_index')
     
-    else:
+    # Check if there are available seats for the session
+    if session.seats <= 0:
+        # If no seats are available, inform the user
+        messages.warning(request, "Sorry, no seats are available for this session.")
+        return redirect('session_index')
+
     # Create a new registration
-        Registration.objects.create(
-            session=session,
-            user=request.user,
-            date_registered=timezone.now().date()
-        )
+    Registration.objects.create(
+        session=session,
+        user=request.user,
+        date_registered=timezone.now().date()
+    )
+
+    # Decrease the available seats by 1
+    session.seats -= 1
+    session.save()
 
     # Notify the user that the registration was successful
-        messages.success(request, "You have successfully registered for the session.")
+    messages.success(request, "You have successfully registered for the session.")
 
     # Redirect the user to the list of their registrations
     return redirect('view_my_registrations')
@@ -210,6 +219,7 @@ def view_my_registrations(request):
 
 
 
+
 # subscription view
 @login_required
 def view_my_subscriptions(request):
@@ -227,7 +237,7 @@ class ProfileCreate(CreateView):
         if self.object.type == 'GO':
             return '/gyms/create/'
         else:
-            return '/gyms/'
+            return '/'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -330,7 +340,7 @@ class SessionDetail(LoginRequiredMixin, DetailView):
 
 class SessionCreate(LoginRequiredMixin, CreateView):
     model = Session
-    fields = ['name','location', 'time','date','price', 'avalibility']
+    fields = ['name','location', 'time','date','seats','price', 'avalibility']
     
 
     def form_valid(self, form):
@@ -346,7 +356,7 @@ class SessionCreate(LoginRequiredMixin, CreateView):
 
 class SessionUpdate(LoginRequiredMixin, UpdateView):
     model = Session
-    fields = ['location', 'time','date','price']
+    fields = ['location', 'time','date','seats','price']
     
 
 
@@ -414,6 +424,7 @@ def about(request):
 # change this to gym_index
 @login_required
 def class_index(request): 
+
     if request.user.profile.type == 'NU':
         gyms = Gym.objects.all()
     else:

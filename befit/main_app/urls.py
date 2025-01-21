@@ -18,7 +18,6 @@ urlpatterns = [
 
     #GYM
     path('gyms/', views.class_index, name='index'),
-    path('accouts/signup/', views.signup, name="signup"),
     path('gyms/<int:gym_id>/', views.gyms_detail, name="detail"),
     path('gyms/create/', views.GymCreate.as_view(), name='gyms_create'),
     # CBV's

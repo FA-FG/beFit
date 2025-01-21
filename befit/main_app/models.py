@@ -33,7 +33,7 @@ class Profile(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER, default = GENDER[0][0])
     weight = models.FloatField(default = 0.0)
     height = models.FloatField(default = 0.0)
-    image = models.ImageField(upload_to='main_app/static/uploads/', default="")
+    image = models.ImageField(upload_to='main_app/static/uploads/', default="/static/uploads/Profile-PNG-Photo_via79VZ.png")
     type = models.CharField(max_length=2, choices=USER_TYPES, default = USER_TYPES[0][0])
     isSubscribed = models.BooleanField(default=False)
 
@@ -86,6 +86,7 @@ class Session(models.Model):
     trainers = models.ManyToManyField(Trainer)
     avalibility = models.BooleanField(default=True)
     price = models.FloatField(default=0.0)
+    seats = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     gym = models.ForeignKey(Gym, on_delete=models.CASCADE)
     
