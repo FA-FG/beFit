@@ -1,13 +1,17 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BeFit</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
   <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  
+ 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </head>
 
@@ -28,18 +32,26 @@
           
           {% if user.is_authenticated %}
           <li><a href="{% url 'profile' %}">Profile</a></li>
-          <li><a href="{% url 'index' %}">View All Gyms</a></li>
           
+          {% if user.profile.type == 'RU' %}
+          <li><a href="{% url 'index' %}">View All Gyms</a></li>
+          {% endif %}
+
           {% if user.profile.type == 'GO' %}
           <!-- <li><a href="{% url 'gyms_create' %}">Add a gym</a></li> -->
           <li><a href="{% url 'session_create' %}">Add a Session</a></li>
           {% endif %}
           <li><a href="{% url 'session_index' %}">View all Sessions</a></li>
+          <li><a href="{% url 'index' %}">View My Gym</a></li>
       
 
          <li><a href="{% url 'view_my_subscriptions' %}">View My Subscriptions</a></li>
          <li><a href="{% url 'subscription_package_list' %}">Subscription</a></li>
+         <li><a href="{% url 'view_my_registrations' %}">Registrations</a></li>
 
+         {% if user.is_superuser %}
+         <li><a href="{% url 'subscription_list' %}">Managa Subscription</a></li>
+         {% endif %}
 
           <form action="{% url 'logout' %}" method="post">
 
@@ -48,7 +60,7 @@
           </form>
     
           </li>
-          Hi {{user.username}}
+         
 
           {% else %}
           <li><a href="{% url 'signup' %}">sign up</a></li>

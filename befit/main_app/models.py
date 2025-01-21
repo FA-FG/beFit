@@ -13,6 +13,15 @@ USER_TYPES = (
     ('GO', 'GYM Owner')
 )
 
+STATUS_TYPE = (
+    ('PE', "Pending"),
+    ('CA', "Canceled"),
+    ('PA', "Paid"),
+    ('NP', "Not Paid"),
+    ('CO', "Completed"),
+    ('RE', "Registered")
+)
+
 # Create your models here.
 
 # Profile Model 
@@ -25,9 +34,7 @@ class Profile(models.Model):
     weight = models.FloatField(default = 0.0)
     height = models.FloatField(default = 0.0)
     image = models.ImageField(upload_to='main_app/static/uploads/', default="")
-
     type = models.CharField(max_length=2, choices=USER_TYPES, default = USER_TYPES[0][0])
-
     isSubscribed = models.BooleanField(default=False)
 
     def get_absolute_url(self):
@@ -47,7 +54,6 @@ class Gym(models.Model):
     location = models.CharField(max_length=100)
     phoneNumber = models.CharField()
     description = models.CharField()
-    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # trainer = models.ForeignKey(Trainer, on_delete = models.CASCADE)
 
@@ -81,7 +87,8 @@ class Session(models.Model):
     avalibility = models.BooleanField(default=True)
     price = models.FloatField(default=0.0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    gym = models.ForeignKey(Gym, on_delete=models.CASCADE)
+    
 
 
     def get_absolute_url(self):
@@ -96,16 +103,12 @@ class Session(models.Model):
 
 
 class SubscriptionPackage(models.Model):
-    USER_TYPE_CHOICES = [
-        ('RU', 'Regular User'),
-        ('GO', 'Gym Owner'),
-    ]
-    
+
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     duration_days = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    user_type = models.CharField(max_length=2, choices=USER_TYPE_CHOICES,default="RU")   
+    user_type = models.CharField(max_length=2, choices=USER_TYPES,default=USER_TYPES[0][0])   
 
     def __str__(self):
         return f"{self.name} ({self.duration_days} days, {self.get_user_type_display()})"
@@ -126,3 +129,15 @@ class Subscription(models.Model):
 
     def get_absolute_url(self):
         return reverse('subscription_detail', kwargs={'pk': self.id})  # Fix this to return a string
+
+class Registration(models.Model):
+        session = models.ForeignKey(Session,on_delete=models.CASCADE, default=1)
+        user = models.ForeignKey(User, on_delete=models.CASCADE)
+        date_registered = models.DateField()
+        status = models.CharField(max_length=2, choices=STATUS_TYPE, default=STATUS_TYPE[0][0])
+        comment = models.CharField(default="", max_length=250)
+    
+        def __str__(self):
+            return self.name
+
+

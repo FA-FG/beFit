@@ -32,6 +32,13 @@ urlpatterns = [
     path('subscriptions/my/', views.view_my_subscriptions, name='view_my_subscriptions'),
 
 
+    path('subscription-packages/', views.SubscriptionPackageListView.as_view(), name='subscription_list'),
+    path('subscription-packages/create/', views.SubscriptionPackageCreateView.as_view(), name='subscription_package_create'),
+    path('subscription-packages/<int:pk>/edit/', views.SubscriptionPackageUpdateView.as_view(), name='subscription_package_edit'),
+    path('subscription-packages/<int:pk>/delete/', views.SubscriptionPackageDeleteView.as_view(), name='subscription_package_delete'),
+
+
+
 
     path('session/', views.SessionList.as_view(), name='session_index'),
     path('session/<int:pk>/', views.SessionDetail.as_view(), name='session_detail'),
@@ -49,6 +56,13 @@ urlpatterns = [
     path('session/<int:session_id>/assoc_trainer/<int:trainer_id>/', views.assoc_trainer, name='assoc_trainer'),
 
     path('session/<int:session_id>/unassoc_trainer/<int:trainer_id>/', views.unassoc_trainer, name='unassoc_trainer'),
+
+    #Registration
+    path('register/<int:session_id>/', views.register_for_session, name='register_for_session'),
+    path('my-registrations/', views.view_my_registrations, name='view_my_registrations'),
+    path('register/<int:pk>/update', views.RegisterUpdate.as_view(), name="register_update"),
+    
+
 
 
     

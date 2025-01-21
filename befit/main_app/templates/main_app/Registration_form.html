@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Edit Registration</h2>
+  
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }} <!-- Render the form fields as paragraphs -->
+    
+    <button type="submit" class="btn">Save Changes</button>
+  </form>
+
+  <br>
+  <a href="{% url 'view_my_registrations' %}">Back to Registrations</a>
+
+  <script>
+      let selectEl = document.getElementById('id_status')
+      M.FormSelect.init(selectEl)
+  </script>
+{% endblock %}
