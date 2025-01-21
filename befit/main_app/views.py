@@ -227,7 +227,7 @@ class ProfileCreate(CreateView):
         if self.object.type == 'GO':
             return '/gyms/create/'
         else:
-            return '/gyms/'
+            return '/'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -414,6 +414,7 @@ def about(request):
 # change this to gym_index
 @login_required
 def class_index(request): 
+
     if request.user.profile.type == 'NU':
         gyms = Gym.objects.all()
     else:

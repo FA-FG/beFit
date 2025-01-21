@@ -3,9 +3,11 @@
 
 <h1>Session List</h1>
 
+{% if not session %}
+<p>You didn't finish the registration process, please Create Your Profile</p>
+<a href="{% url 'session_create' %}">Add Session</a>
+{% else %}
 {% for session in session_list %}
-
-
   <a href="{% url 'session_detail' session.id %}">
     <div class="card">
         <div class="card-content">
@@ -15,5 +17,6 @@
     </div>
   </a>
 {% endfor %}
+{% endif %}
 
 {% endblock %}
