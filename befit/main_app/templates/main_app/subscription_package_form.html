@@ -12,5 +12,16 @@
     </form>
 
     <a href="{% url 'subscription_package_list' %}">Back to Package List</a>
+
+    <script>
+      let selectEl = document.getElementById('id_user_type')
+      M.FormSelect.init(selectEl)
+    </script>
+    
+
+
+
+
 {% endblock %}
 
+ 

@@ -11,9 +11,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from datetime import timedelta
 
-from django.contrib import messages  # Import messages framework
-
-from django.contrib import messages  # Import messages framework
+from django.contrib import messages 
 
 from django.utils import timezone
 
@@ -95,6 +93,12 @@ def subscribe_to_package(request, package_id):
 def subscription_package_list(request):
     user_profile = Profile.objects.get(user=request.user)  # Get the logged-in user's profile
 
+    active_subscription = Subscription.objects.filter(user=request.user, status='Active').exists()
+
+    if active_subscription:
+        # Notify the user that they already have an active subscription
+        messages.warning(request, "You already have an active subscription. Please wait for it to expire before subscribing to a new one.")
+
     if user_profile.type == 'GO':  # Gym owner
         # Show only gym owner packages
         packages = SubscriptionPackage.objects.filter(user_type='GO')
@@ -106,43 +110,103 @@ def subscription_package_list(request):
 
 
 # register views
+# @login_required
+# def register_for_session(request, session_id):
+#     session = Session.objects.filter(id=session_id).first()
+
+#     # If the session doesn't exist, redirect to the session list
+#     if not session:
+#         return redirect('session_list')
+
+#     # Check if the user is already registered for the session
+#     if Registration.objects.filter(user=request.user, session=session).exists():
+#         return redirect('session_detail', session_id=session.id)
+
+#     # Create a new registration
+#     Registration.objects.create(
+#         session=session,
+#         user=request.user,
+#         date_registered=timezone.now().date()
+#     )
+
+#     # Redirect the user to the list of their registrations
+#     return redirect('view_my_registrations')
+
 @login_required
 def register_for_session(request, session_id):
     session = Session.objects.filter(id=session_id).first()
 
     # If the session doesn't exist, redirect to the session list
     if not session:
+        messages.error(request, "Session does not exist.")
         return redirect('session_list')
+
+    # Check if the user has an active subscription
+    user_subscription = Subscription.objects.filter(user=request.user, status='Active').first()
+
+    if not user_subscription:
+        # If not subscribed, notify the user to subscribe first
+        messages.warning(request, "You must subscribe to a package first before registering for a session.")
+        return redirect('subscription_package_list')
 
     # Check if the user is already registered for the session
     if Registration.objects.filter(user=request.user, session=session).exists():
-        return redirect('session_detail', session_id=session.id)
-
+        # If already registered, inform the user
+        messages.info(request, "You are already registered for this session.")
+        return redirect('session_index')
+    
+    else:
     # Create a new registration
-    Registration.objects.create(
-        session=session,
-        user=request.user,
-        date_registered=timezone.now().date()
-    )
+        Registration.objects.create(
+            session=session,
+            user=request.user,
+            date_registered=timezone.now().date()
+        )
+
+    # Notify the user that the registration was successful
+        messages.success(request, "You have successfully registered for the session.")
 
     # Redirect the user to the list of their registrations
     return redirect('view_my_registrations')
 
 
+# @login_required
+# def view_my_registrations(request):
+#     user_profile = request.user.profile
+#     # user = registration.user
+    
+#     # Check if the user is a Gym Owner (GO) or a Regular User (NU)
+#     if user_profile.type == 'GO':
+#         print(1)
+#         # gym = Gym.objects.filter(user=user).first()
+#         # if gym:
+#         #     registrations = Registration.objects.filter(gym=gym)
+#     else:
+#         # If Regular User, show only their registrations
+#         registrations = Registration.objects.filter(user=request.user)
+
+#     return render(request, 'main_app/my_registrations.html', {'registrations': registrations})
+
+
 @login_required
 def view_my_registrations(request):
-    user_profile = request.user.profile
-    
-    # Check if the user is a Gym Owner (GO) or a Regular User (NU)
-    if user_profile.type == 'GO':
-        # If Gym Owner, show all registrations
-        registrations = Registration.objects.all()
-    else:
-        # If Regular User, show only their registrations
+    user_profile = request.user.profile  # Get the logged-in user's profile
+
+    if user_profile.type == 'GO':  # Gym Owner
+        # Get the gym associated with the logged-in user (Owner)
+        gym = Gym.objects.filter(user=request.user).first()
+
+        if gym:
+            # Filter registrations for sessions associated with this gym
+            registrations = Registration.objects.filter(session__gym=gym)
+        else:
+            registrations = []
+            messages.warning(request, "No gym associated with your account.")
+    else:  # Regular User
+        # Regular users can only see their own registrations
         registrations = Registration.objects.filter(user=request.user)
 
     return render(request, 'main_app/my_registrations.html', {'registrations': registrations})
-
 
 
 
@@ -267,10 +331,12 @@ class SessionDetail(LoginRequiredMixin, DetailView):
 class SessionCreate(LoginRequiredMixin, CreateView):
     model = Session
     fields = ['name','location', 'time','date','price', 'avalibility']
+    
 
     def form_valid(self, form):
         # Set the user to the currently authenticated user
         form.instance.user = self.request.user
+        form.instance.gym = Gym.objects.get(user=self.request.user)
         return super().form_valid(form)
 
     # Redirect the user after successful form submission
