@@ -3,20 +3,22 @@
 
 <h1>Session List</h1>
 
-{% if not session %}
-<p>You didn't finish the registration process, please Create Your Profile</p>
-<a href="{% url 'session_create' %}">Add Session</a>
+{% if not session_list %}
+  <p>You don't have any sessions to view. Please create a session.</p>
+  <a href="{% url 'session_create' %}">Add a Session</a>
+
 {% else %}
-{% for session in session_list %}
-  <a href="{% url 'session_detail' session.id %}">
-    <div class="card">
+  {% for session in session_list %}
+    <a href="{% url 'session_detail' session.id %}">
+      <div class="card">
         <div class="card-content">
-            <span class="card-title">{{ session.name }}</span>
-            <p>Location: {{ session.location }}</p>
+          <span class="card-title">{{ session.name }}</span>
+          <p>Location: {{ session.location }}</p>
+          <p>Seats Available: {{session.seats}}</p>
         </div>
-    </div>
-  </a>
-{% endfor %}
+      </div>
+    </a>
+  {% endfor %}
 {% endif %}
 
 {% endblock %}

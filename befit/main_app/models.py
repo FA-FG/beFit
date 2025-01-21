@@ -86,6 +86,7 @@ class Session(models.Model):
     trainers = models.ManyToManyField(Trainer)
     avalibility = models.BooleanField(default=True)
     price = models.FloatField(default=0.0)
+    seats = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     gym = models.ForeignKey(Gym, on_delete=models.CASCADE)
     
