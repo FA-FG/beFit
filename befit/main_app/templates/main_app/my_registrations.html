@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<div class="regist-container">
 {% if request.user.profile.type == 'GO' %}
 <h2>All Registrations</h2>
 {% else %}
@@ -34,5 +34,5 @@
         {% endfor %}
     </tbody>
 </table>
-
+</div>
 {% endblock %}

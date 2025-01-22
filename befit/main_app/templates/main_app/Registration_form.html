@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="login-container">
   <h2>Edit Registration</h2>
   
   <form method="post">
@@ -17,4 +18,5 @@
       let selectEl = document.getElementById('id_status')
       M.FormSelect.init(selectEl)
   </script>
+  </div>
 {% endblock %}

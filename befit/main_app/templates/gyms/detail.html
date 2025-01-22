@@ -1,20 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<div class="login-container">
 <h1>Gym Details</h1>
-<div class="trainer-header">
-  <h3>Trainers</h3>
-  
+</div>
+<div class="login-container">
+  <h1>Trainers</h1>
     <ul>
       {% for trainer in trainers %}
       <a href="{% url 'trainer_detail' trainer.id %}">
         <li>
          <div class="trainer-picture">
           {% load static %}
-          
           <img
             src="{% static trainer.image|cut:'main_app/static/' %}"
-            style="width: 100px"
+            style="width: 150px"
           />
         </li>
       </a>
@@ -27,32 +26,26 @@
 
 
 
-<div class="card">
-  <div class="card-content">
+
+    <div class="login-container">
     <span class="card-title">{{ gym.gym }}</span>
     <p>Location: {{ gym.location }}</p>
     <p>Description: {{ gym.description }}</p>
     <p>Phone Number: {{ gym.phoneNumber }}</p>
-
+</div>
     {% if request.user == gym.user %}
     <div class="card-section">
       <a href="{% url 'gyms_update' gym.id %}">Edit</a>
       <a href="{% url 'gyms_delete' gym.id %}">Delete</a>
     </div>
     {% endif %}
-  </div>
-
-
-    
+  
     <div class="below">
       {% if request.user == gym.user %}
       <a href="{% url 'trainer_create' %}">Add Trainer</a>
       {% endif %}
-  
-    
-  </div>
 </div>
-
+</div> 
 {% endblock %}
 
 

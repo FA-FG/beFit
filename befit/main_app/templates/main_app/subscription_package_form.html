@@ -3,14 +3,28 @@
 {% block title %}Create / Edit Subscription Package{% endblock %}
 
 {% block content %}
-    <h1>{% if object %}Edit{% else %}Create{% endif %} Subscription Package</h1>
+<!-- Main container with custom styling -->
+<div class="subscription-container">
+    <h1 class="subscription-title">{% if object %}Edit{% else %}Create{% endif %} Subscription Package</h1>
 
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">{% if object %}Update{% else %}Create{% endif %}</button>
+        <div class="package-list">
+            <!-- Display the form fields here -->
+            {{ form.as_p }}
+        </div>
+
+        <div class="subscribe-form">
+            <!-- The button will now follow the existing styles -->
+            <button type="submit" class="subscribe-button">{% if object %}Update{% else %}Create{% endif %}</button>
+        </div>
     </form>
 
-    <a href="{% url 'subscription_package_list' %}">Back to Package List</a>
+    <!-- Back to Package List link with custom styling -->
+    <div class="messages">
+        <a href="{% url 'subscription_package_list' %}" class="subscribe-link">Back to Package List</a>
+    </div>
+</div>
 {% endblock %}
+
 

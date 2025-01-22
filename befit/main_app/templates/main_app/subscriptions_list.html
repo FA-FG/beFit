@@ -5,6 +5,7 @@
 {% block title %}Manage Subscription Packages{% endblock %}
 
 {% block content %}
+
     <main class="container">
         <h1 class="gym-details-header">Manage Subscription Packages</h1>
 
@@ -13,7 +14,7 @@
         <div class="package-list">
             {% for package in packages %}
                 <div class="package-item">
-                    <h3 class="package-name">{{ package.name }} ({{ package.duration_days }} days)</h3>
+                    <h1 class="package-name">{{ package.name }} ({{ package.duration_days }} days)</h1>
                     <p class="package-description">{{ package.description }}</p>
                     <p><strong>Price:</strong> ${{ package.price }}</p>
                     <p><strong>User Type:</strong> {{ package.get_user_type_display }}</p>
@@ -28,5 +29,6 @@
             {% endfor %}
         </div>
     </main>
+    
 {% endblock %}
 

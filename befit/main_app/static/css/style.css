@@ -17,6 +17,7 @@ main.container {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+
 .title {
   
   max-width: 900px; /* Container width */
@@ -103,7 +104,7 @@ main.container {
   max-width: 900px; /* Limit the width of the content */
   margin: 40px auto; /* Center the content */
   padding: 20px;
-  background-color: rgba(48, 38, 38, 0.9); /* Set a white background for the content */
+  background-color: rgba(26, 22, 22, 0.9); /* Set a white background for the content */
   border-radius: 8px; /* Add rounded corners for a smooth design */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow effect */
 }
@@ -140,7 +141,7 @@ footer.page-footer {
   max-width: 900px; /* Container width */
   margin: 20px auto; /* Center the profile container */
   padding: 20px;
-  background-color: rgb(33, 27, 27, 0.8);
+  background-color: rgba(21, 19, 19, 0.8);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for clean look */
   display: flex;                /* Use flexbox */
@@ -373,15 +374,16 @@ footer.page-footer {
 .trainer-images {
   display: flex; /* Align images in a row */
   gap: 10px; /* Space between images */
-  flex-direction: row;
+  margin-right: 100px;
 }
-
+ 
 /* Styling for the individual trainer image */
 .trainer-image {
   width: 80px; /* Adjust the size of the trainer image */
-  height: 80px; /* Maintain aspect ratio */
+  height: 150px; /* Maintain aspect ratio */
   border-radius: 50%; /* Make the image circular */
   object-fit: cover; /* Ensure the image covers the circular area */
+  margin-right: 100px;
 }
 
 
@@ -537,7 +539,7 @@ ul li h4 {
   max-width: 900px; /* Limit the width of the content */
   margin: 40px auto; /* Center the content */
   padding: 20px;
-  background-color: rgba(33, 27, 27, 0.8); /* Dark background for the container */
+  background-color: rgba(30, 26, 26, 0.8); /* Dark background for the container */
   border-radius: 8px; /* Rounded corners for the container */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
 }
@@ -607,4 +609,60 @@ ul li h4 {
   border-radius: 5px;
   margin-bottom: 10px;
   font-size: 1.2rem;
+}
+
+/* Style for the login form container */
+.login-container {
+  background-color: rgba(0, 0, 0, 0.7); /* Black transparent background */
+  padding: 30px;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slight shadow effect */
+  width: 400px; /* Limit the width of the form */
+  margin: 40px auto; /* Center the form on the page */
+}
+
+/* Style for the form header */
+.login-container h1 {
+  color: #f1f1f1; /* Light color for the header */
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Style for the form inputs */
+.login-container input[type="text"], 
+.login-container input[type="password"] {
+  width: 100%; /* Full width for the inputs */
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #c669de; /* Purple border */
+  background-color: rgba(255, 255, 255, 0.8); /* Slight white background */
+  color: #333; /* Dark text for inputs */
+}
+
+/* Style for the submit button */
+.login-container input[type="submit"] {
+  background-color: #c669de; /* Purple background */
+  align-items: center;
+  color: white;
+  padding: 8px 16px; /* Smaller padding for a smaller button */
+  font-size: 1rem; /* Smaller font size */
+  border: none;
+  border-radius: 5px;
+  width: auto; /* Adjust width to fit content */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for submit button */
+.login-container input[type="submit"]:hover {
+  background-color: #9b44a6; /* Darker purple on hover */
+}
+
+.regist-container {
+  background-color: rgba(0, 0, 0, 0.7); 
+  padding: 30px;
+  margin: 20px;
+  border-radius: 10px;
 }
