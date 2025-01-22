@@ -7,7 +7,7 @@
 {% block content %}
 
 <h1>Gym List</h1>
-
+<div class="login-container">
 {% if not gyms %}
   {% if not user.profile.isSubscribed %}
     <p>You didn't finish the registration process, please Create Your Profile</p>
@@ -17,10 +17,12 @@
     <a href="{% url 'gyms_create' %}">Create A Gym</a>
   {% endif %}
 {% else %}
+  
   {% for gym in gyms %}
     <div class="card">
       <a href="{% url 'detail' gym.id %}">
         <div class="card-content">
+          
           <span class="card-title">{{ gym.gym }}</span>
           <p>Location: {{ gym.location }}</p>
           <p>Description: {{ gym.description }}</p>
@@ -28,7 +30,8 @@
         </div>
       </a>
     </div>
+    <a href="{% url 'session_create' %}">Add a Session</a>
   {% endfor %}
 {% endif %}
-
+</div>
 {% endblock %}

@@ -1,50 +1,51 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="login-container">
-<h1>Gym Details</h1>
-</div>
-<div class="login-container">
-  <h1>Trainers</h1>
-    <ul>
-      {% for trainer in trainers %}
-      <a href="{% url 'trainer_detail' trainer.id %}">
-        <li>
-         <div class="trainer-picture">
-          {% load static %}
-          <img
-            src="{% static trainer.image|cut:'main_app/static/' %}"
-            style="width: 150px"
-          />
-        </li>
-      </a>
-      {% empty %}
-      <p>No trainers available for this gym.</p>
-      {% endfor %}
-    </ul>
+  <h1>Gym Details</h1>
   </div>
-</div>
-
-
-
-
-    <div class="login-container">
-    <span class="card-title">{{ gym.gym }}</span>
-    <p>Location: {{ gym.location }}</p>
-    <p>Description: {{ gym.description }}</p>
-    <p>Phone Number: {{ gym.phoneNumber }}</p>
-</div>
-    {% if request.user == gym.user %}
-    <div class="card-section">
-      <a href="{% url 'gyms_update' gym.id %}">Edit</a>
-      <a href="{% url 'gyms_delete' gym.id %}">Delete</a>
+  <div class="login-container right">
+    <h1>Trainers</h1>
+      <ul>
+        <div class="below center">
+          {% if request.user == gym.user %}
+          <a href="{% url 'trainer_create' %}">Add Trainer</a>
+          {% endif %}
     </div>
-    {% endif %}
-  
-    <div class="below">
+        {% for trainer in trainers %}
+        <a href="{% url 'trainer_detail' trainer.id %}">
+          <li>
+          <div class="trainer-picture">
+            {% load static %}
+            <img
+              src="{% static trainer.image|cut:'main_app/static/' %}"
+              style="width: 150px"
+            />
+          </li>
+        </a>
+        {% empty %}
+        <p>No trainers available for this gym.</p>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+
+
+
+      <div class="login-container">
+      <span class="card-title">{{ gym.gym }}</span>
+      <p>Location: {{ gym.location }}</p>
+      <p>Description: {{ gym.description }}</p>
+      <p>Phone Number: {{ gym.phoneNumber }}</p>
       {% if request.user == gym.user %}
-      <a href="{% url 'trainer_create' %}">Add Trainer</a>
+      <div class="card-section">
+        <a href="{% url 'gyms_update' gym.id %}">Edit</a>
+        <a href="{% url 'gyms_delete' gym.id %}">Delete</a>
+      </div>
       {% endif %}
-</div>
+  </div>
+    
+      
 </div> 
 {% endblock %}
 

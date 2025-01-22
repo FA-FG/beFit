@@ -1,49 +1,47 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="login-container">
   {% if object %}
-    <h1>Edit <span class="teal-text">{{object.name}}</span></h1>
+  <h1>Edit <span class="teal-text">{{object.name}}</span></h1>
   {% else %}
-    <h1>Add Session</h1>
+  <h1>Add Session</h1>
   {% endif %}
   <form action="" method="post">
     {% csrf_token %}
     <table>
       {% for field in form %}
-        <tr>
-          <td>{{ field.label }}</td>
-          <td>
-            {% if field.name == 'avalibility' %}
-              <!-- Materialize switch for 'avalibility' with True/False labels -->
-              <div class="switch">
-                <label>
-                  False
-                  {{ field }}
-                  <span class="lever"></span>
-                  True
-                </label>
-              </div>
-            {% else %}
-              {{ field }}
-            {% endif %}
-          </td>
-        </tr>
+      <tr>
+        <td>{{ field.label }}</td>
+        <td>{{ field.date }}</td>
+        <td>
+          {% if field.name == 'avalibility' %}
+          <!-- Materialize switch for 'avalibility' with True/False labels -->
+          <div class="switch">
+            <label>
+              False {{ field }}
+              <span class="lever"></span>
+              True
+            </label>
+          </div>
+          {% else %} {{ field }} {% endif %}
+        </td>
+      </tr>
       {% endfor %}
     </table>
-    <input type="submit" value="Submit!" class="btn">
+    <input type="submit" value="Submit!" class="btn" />
   </form>
-{% endblock %}
-
-{% block extra_js %}
+  {% endblock %} {% block extra_js %}
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Initialize Materialize switches
-      var elems = document.querySelectorAll('.switch input');
-      var instances = M.FormSelect.init(elems);
-    });
+
+    var dateEl = document.getElementById('id_date')
+    M.Datepicker.init(dateEl, {
+      format: 'yyyy-mm-dd',
+      defaultDate: new Date(),
+      setDefaultDate: true,
+      autoClose: true
+    })
 
     let selectEl = document.getElementById('id_trainers')
     M.FormSelect.init(selectEl)
   </script>
-  </div>
+</div>
 {% endblock %}

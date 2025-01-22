@@ -7,9 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BeFit</title>
 
-  
-<!--   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
- -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -18,53 +15,58 @@
 <body>
 
   <header>
-    <!-- Vertical Sidebar Navigation -->
     <div class="sidebar">
-      Hi {{user.username}}
       <br>
-      <a href="{% url 'home' %}" class="brand-logo">BeFit</a>
+
       <ul>
-        
+        {% if user.is_authenticated %}
+        <li><p style="text-align: center;">Hi {{user.username}}!</p></li>
+        {% endif %}
+        <li><a href="{% url 'home' %}" class="brand-logo">BeFit</a></li>
         <li><a href="{% url 'about' %}">About</a></li>
         
         {% if user.is_authenticated %}
-        <li><a href="{% url 'profile' %}">Profile</a></li>
-        <li><a href="{% url 'index' %}">View All Gyms</a></li>
+          {% if user.profile %}
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="{% url 'index' %}">View Gyms</a></li>
 
-        {% if user.profile.type == 'GO' %}
-        <li><a href="{% url 'session_create' %}">Add a Session</a></li>
-        {% endif %}
-        
-        <li><a href="{% url 'session_index' %}">View all Sessions</a></li>
-        <li><a href="{% url 'view_my_subscriptions' %}">View My Subscriptions</a></li>
-        <li><a href="{% url 'subscription_package_list' %}">Subscription</a></li>
-        <li><a href="{% url 'view_my_registrations' %}">Registrations</a></li>
-        <li><a href="{% url 'subscription_list' %}">Manage Subscription</a></li>
+            {% if user.profile.type == 'GO' %}
+            <!-- <li><a href="{% url 'session_create' %}">Add a Session</a></li> -->
+            {% endif %}
+            
+            <li><a href="{% url 'session_index' %}">View Sessions</a></li>
+            <li><a href="{% url 'view_my_subscriptions' %}">View My Subscriptions</a></li>
+            <li><a href="{% url 'view_my_registrations' %}">Registrations</a></li>
+            <li><a href="{% url 'subscription_package_list' %}">Subscription</a></li>
+            <li><a href="{% url 'subscription_list' %}">Manage Subscription</a></li>
 
-        <form action="{% url 'logout' %}" method="post">
-          {% csrf_token %}
-          <button type="submit" class="logout-btn">Logout</button>
-        </form>
+            <!-- Logout -->
+            <form action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="logout-btn">Logout</button>
+            </form>
+          {% else %}
+            <!-- if  user does not have a profile, show only limited options -->
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <form action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="logout-btn">Logout</button>
+            </form>
+          {% endif %}
         {% else %}
-        <li><a href="{% url 'signup' %}">Sign Up</a></li>
-        <li><a href="{% url 'login' %}">Log In</a></li>
+          <!-- if not authenticated -->
+          <li><a href="{% url 'signup' %}">Sign Up</a></li>
+          <li><a href="{% url 'login' %}">Log In</a></li>
         {% endif %}
       </ul>
     </div>
   </header>
 
   <main class="main-content">
-
     {% block content %}
     {% endblock %}
   </main>
-
-  <!-- <footer class="page-footer">
-    <div class="right">All Rights Reserved, &copy; 2025 BeFit &nbsp;</div>
-
-  </footer> -->
-
-  </footer>
 
 </body>
 </html>

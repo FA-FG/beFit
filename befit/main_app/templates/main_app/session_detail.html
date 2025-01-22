@@ -1,104 +1,107 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="login-container">
-<h1>Session Details</h1>
 
-<div class="row">
-  <div class="col s6 col-offset-3">
-    <div class="card">
-      <div class="card-content">
-        <span class="card-title">{{ session.name }}</span>
-        <p>location: {{ session.location }}</p>
-        <p>Price: {{ session.price }} BD</p>
-          <p>Seats Available: {{session.seats}}</p>
-        </div>
-      </div>
+
+<!-- Trainers Section -->
+<div class="trainers-container right">
+  <h1>Trainers</h1>
+  <ul>
+    <div class="trainer-action-container center">
       {% if request.user == session.user %}
-      <div class="card-action">
-        <a href="{% url 'session_update' session.id %}">Edit</a>
-        <a href="{% url 'session_delete' session.id %}">Delete</a>
-      </div>
+      <a href="{% url 'trainer_create' %}">Add Trainer</a>
       {% endif %}
     </div>
-   
-    <!-- Registration Button -->
-     {% if user.profile.type == "NU" %}
-      {% if not user in session.registrations.all %}
-      <div class="card-action">
-        <form action="{% url 'register_for_session' session.id %}" method="post">
-          {% csrf_token %}
-          <button type="submit" class="btn">Register</button>
-        </form>
-      </div>
-      {% else %}
-      <div class="card-action">
-        <span>You are already registered for this session.</span>
-      </div>
-      {% endif %}
-    {% endif %}
-  </div>
-</div>
 
-
-  <div class="trainer-header">
-      <h3 class="trainer1">Trainers</h3>
-      <div class="trainer-picture"></div>
-      {% if session.trainers.count %}
-        {% for trainer in session.trainers.all %}
-              <a href="{% url 'trainer_detail' trainer.id %}">
-                {% load static %}
-                
-                <img
-                src="{% static trainer.image|cut:'main_app/static/'%}"
-                style="width: 100px"
-              />
-              </a>
-              <div class="card-action">
-                {% if request.user == session.user %}
-                <form action="{% url 'unassoc_trainer' session.id trainer.id %}" method="post">
-                  {% csrf_token %}
-                  <button type="submit" class="btn">Delete</button>
-                </form>
-                {% endif %}
+    {% if session.trainers.count %}
+      {% for trainer in session.trainers.all %}
+      <a href="{% url 'trainer_detail' trainer.id %}">
+        <li>
+          <div class="trainer-picture">
+            {% load static %}
+            <img
+              src="{% static trainer.image|cut:'main_app/static/' %}"
+              alt="Trainer Image"
+              style="width: 150px"
+            />
           </div>
-          
-        {% endfor %}
-        {% else %}
-          <h5>No Trainers Available</h5>
-
-      {% endif %}
-    </div>
-
-  </div>
-  {% if request.user == session.user %}
-  <div class="col s6">
-    <h3>Trainers List</h3>
-
-    {% if trainers.count %}
-      {% for trainer in trainers %}
-      <div class="card">
-        <div class="card-content">
-          <span class="card-title">
-            {{ trainer.name }}
-          </span>
-          
-        </div>
-        
-        <div class="card-action">
-          <form action="{% url 'assoc_trainer' session.id trainer.id %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn">Add</button>
-          </form>
-        </div>
+        </li>
+      </a>
+      <div class="trainer-action">
+        {% if request.user == session.user %}
+        <form action="{% url 'unassoc_trainer' session.id trainer.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="delete-btn">Delete</button>
+        </form>
+        {% endif %}
       </div>
       {% endfor %}
     {% else %}
-      <h5>{{ trainer.name }} already has all trainers available.</h5>
+    <p>No trainers available for this session.</p>
     {% endif %}
-  </div>
-  {% endif %}
-</div>
+  </ul>
 </div>
 
+
+<!-- Session Details Section -->
+<div class="details-container center">
+  <h1>Session Details</h1>
+  <div class="session-details">
+    <span class="session-card-title">{{ session.name }}</span>
+    <p>Location: {{ session.location }}</p>
+    <p>Price: {{ session.price }} BD</p>
+    <p>Seats Available: {{ session.seats }}</p>
+
+    {% if request.user == session.user %}
+    <div class="session-actions">
+      <a href="{% url 'session_update' session.id %}">Edit</a>
+      <a href="{% url 'session_delete' session.id %}">Delete</a>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Registration Button -->
+  {% if user.profile.type == "NU" %}
+    {% if not user in session.registrations.all %}
+    <div class="session-registration-action">
+      <form action="{% url 'register_for_session' session.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="register-btn">Register</button>
+      </form>
+    </div>
+    {% else %}
+    <div class="session-registration-action">
+      <span>You are already registered for this session.</span>
+    </div>
+    {% endif %}
+  {% endif %}
 </div>
+
+
+
+{% if request.user == session.user %}
+<!-- Add Trainers to Session Section -->
+<div class="add-trainers-container">
+  <h3>Trainers List</h3>
+
+  {% if trainers.count %}
+    {% for trainer in trainers %}
+    <div class="trainer-card">
+      <div class="trainer-card-content">
+        <span class="trainer-card-title">{{ trainer.name }}</span>
+      </div>
+
+      <div class="trainer-card-action">
+        <form action="{% url 'assoc_trainer' session.id trainer.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="add-btn">Add</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+  <p>No trainers available to add to this session.</p>
+  {% endif %}
+</div>
+{% endif %}
+
 {% endblock %}
