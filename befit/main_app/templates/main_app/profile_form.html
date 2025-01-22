@@ -1,27 +1,31 @@
-{% extends "base.html" %} {% block content %} {% if object %}
-<h1>Edit Profile</h1>
-{% else %} 
-<h1>Create Your Profile</h1>
-{% endif %}
+{% extends "base.html" %}
 
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %} {{ form.as_p }}
-   <!-- Password field -->
+{% block content %}
+  <div class="login-container">
+    <h1>{% if object %} Edit Profile {% else %} Create Your Profile {% endif %}</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <!-- Display form fields here -->
+      {{ form.as_p }}
+      
+      <!-- Password field (only show if editing an existing profile) -->
+      {% if object %}
+        <label for="password">New Password (leave blank if not changing):</label>
+        <input type="password" name="password" id="password">
+      {% endif %}
+      
+      <!-- Submit button styled as per the CSS -->
+      <input type="submit" value="Submit">
+    </form>
+  </div>
 
-   {% if object %}
-   <label for="password">New Password (leave blank if not changing):</label>
-   <input type="password" name="password" id="password">
-   {% endif %}
-  <button type="submit">Submit</button>
-</form>
+  <script>
+    let selectEl = document.getElementById('id_type');
+    M.FormSelect.init(selectEl);
 
-
-<script>
-  let selectEl = document.getElementById('id_type')
-  M.FormSelect.init(selectEl)
-
-  let selectEl2 = document.getElementById('id_gender')
-  M.FormSelect.init(selectEl2)
-</script>
-
+    let selectEl2 = document.getElementById('id_gender');
+    M.FormSelect.init(selectEl2);
+  </script>
 {% endblock %}

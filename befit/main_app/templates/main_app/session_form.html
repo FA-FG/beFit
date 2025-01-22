@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="login-container">
   {% if object %}
     <h1>Edit <span class="teal-text">{{object.name}}</span></h1>
   {% else %}
@@ -44,4 +45,5 @@
     let selectEl = document.getElementById('id_trainers')
     M.FormSelect.init(selectEl)
   </script>
+  </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<div class="login-container">
 <h1>Session Details</h1>
 
 <div class="row">
@@ -37,19 +37,17 @@
       {% endif %}
     {% endif %}
   </div>
+</div>
 
 
-
-  <div class="row right">
-    <div class="cl s6">
-      <h3>Trainers</h3>
+  <div class="trainer-header">
+      <h3 class="trainer1">Trainers</h3>
+      <div class="trainer-picture"></div>
       {% if session.trainers.count %}
         {% for trainer in session.trainers.all %}
-          <div class="card">
-            <div class="card-content">
               <a href="{% url 'trainer_detail' trainer.id %}">
-                <span class="card-title"> {{trainer.name}}</span>
                 {% load static %}
+                
                 <img
                 src="{% static trainer.image|cut:'main_app/static/'%}"
                 style="width: 100px"
@@ -62,9 +60,6 @@
                   <button type="submit" class="btn">Delete</button>
                 </form>
                 {% endif %}
-              </div>
-            </div>
-            
           </div>
           
         {% endfor %}
@@ -102,6 +97,7 @@
     {% endif %}
   </div>
   {% endif %}
+</div>
 </div>
 
 </div>

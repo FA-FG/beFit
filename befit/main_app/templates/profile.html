@@ -1,33 +1,41 @@
-{% extends "base.html" %} {% block content %}
-<div class="row my-3 p-3">
-  <h1>{{ user.username }}'s profile page</h1>
+{% extends "base.html" %}
 
-  {% if user.profile %} {% load static %}
-  <!-- Correct the static image path usage -->
-  <img
-    src="{% static user.profile.image|cut:'main_app/static/' %}"
-    alt="profile img"
-    width="300px"
-    height="300px"
-  />
+{% block content %}
+<div class="profile-container my-3 p-3">
+  <h1>{{ user.username }}'s Profile Page</h1>
 
-  <p>Age: {{ user.profile.age }}</p>
-  <p>Gender: {{ user.profile.gender }}</p>
-  <p>Weight: {{ user.profile.weight }} kg</p>
-  <p>Height: {{ user.profile.height }} cm</p>
+  {% if user.profile %}
+  {% load static %}
+  
+  <!-- Profile Image -->
+  <div class="profile-image-container">
+    <img
+      src="{% static user.profile.image|cut:'main_app/static/' %}"
+      alt="Profile Image"
+      class="profile-image"
+    />
+  </div>
 
-  <p>Subscribed: {{ user.profile.isSubscribed }}</p>
+  <!-- Profile Details -->
+  <div class="profile-info">
+    <p class="profile-detail">Age: {{ user.profile.age }}</p>
+    <p class="profile-detail">Gender: {{ user.profile.gender }}</p>
+    <p class="profile-detail">Weight: {{ user.profile.weight }} kg</p>
+    <p class="profile-detail">Height: {{ user.profile.height }} cm</p>
+    <p class="profile-detail">Subscribed: {{ user.profile.isSubscribed }}</p>
+  </div>
 
-  <div class="card">
-    <li><a href="{% url 'profile_update' user.profile.id %}">Edit</a></li>
+  <div class="edit">
+    <li><a href="{% url 'profile_update' user.profile.id %}" class="edit-link">Edit Profile</a></li>
   </div>
 
   {% if not user.profile.isSubscribed %}
-  <a href="{% url 'subscribe' %}">Subscribe</a>
-  {% endif %} {% else %}
-  <p>You didn't finish the registration process, please Create Your Profile.</p>
-  <a href="{%url 'profile_create' %}">Create Profile</a>
+  <a href="{% url 'subscribe' %}" class="subscribe-link">Subscribe</a>
+  {% endif %}
+  
+  {% else %}
+  <p>You didn't finish the registration process. Please create your profile.</p>
+  <a href="{% url 'profile_create' %}" class="create-profile">Create Profile</a>
   {% endif %}
 </div>
-
 {% endblock %}

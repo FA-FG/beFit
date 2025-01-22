@@ -1,29 +1,30 @@
-{% extends 'base.html' %}
+
+{% extends 'base.html' %} 
+
 {% block content %}
 
+<div class="login-container">
 <h1>Gym List</h1>
 
-{% if not gyms %}
-  {% if not user.profile.isSubscribed %}
-    <p>You didn't finish the registration process, please Create Your Profile</p>
-    <a href="{% url 'profile_create' %}">Create Profile</a>
-  {% else %}
-    <p>You didn't finish the registration process, please Add a Gym</p>
-    <a href="{% url 'gyms_create' %}">Create A Gym</a>
-  {% endif %}
-{% else %}
-  {% for gym in gyms %}
-    <div class="card">
-      <a href="{% url 'detail' gym.id %}">
-        <div class="card-content">
-          <span class="card-title">{{ gym.gym }}</span>
-          <p>Location: {{ gym.location }}</p>
-          <p>Description: {{ gym.description }}</p>
-          <p>Phone Number: {{ gym.phoneNumber }}</p>
-        </div>
-      </a>
+
+{% for gym in gyms %}
+<div class="card">
+  <a href="{% url 'detail' gym.id %}">
+    <div class="card-content">
+      <span class="card-title">{{ gym.gym }}</span>
+      
+      <p><span>Location:</span> <span class="info">{{ gym.location }}</span></p>
+      <p><span>Description:</span> <span class="info">{{ gym.description }}</span></p>
+      <p><span>Phone Number:</span> <span class="info">{{ gym.phoneNumber }}</span></p>
+
     </div>
-  {% endfor %}
-{% endif %}
+  </a>
+</div>
+</div>
+{% endfor %}
 
 {% endblock %}
+
+
+
+

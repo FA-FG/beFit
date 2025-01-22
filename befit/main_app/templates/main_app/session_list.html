@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<div class="login-container">
 <h1>Session List</h1>
 
 {% if not session_list %}
@@ -15,9 +15,10 @@
           <span class="card-title">{{ session.name }}</span>
           <p>Location: {{ session.location }}</p>
         </div>
-      </div>
-    </a>
-  {% endfor %}
-{% endif %}
 
+    </div>
+  </a>
+{% endfor %}
+</div>
 {% endblock %}
+

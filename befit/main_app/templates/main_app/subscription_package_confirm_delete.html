@@ -3,6 +3,7 @@
 {% block title %}Confirm Delete{% endblock %}
 
 {% block content %}
+<div class="login-container">
     <h1>Are you sure you want to delete this package?</h1>
 
     <p>{{ object.name }} ({{ object.duration_days }} days)</p>
@@ -15,4 +16,5 @@
     </form>
 
     <a href="{% url 'subscription_package_list' %}">Cancel</a>
+    </div>
 {% endblock %}

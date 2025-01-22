@@ -1,7 +1,125 @@
 body {
+  font-family: 'Arial', sans-serif; /* Font for the entire page */
+  line-height: 1.6; /* Line height to make text more readable */
+  color: #f9f8f8; /* Dark gray text color */
+  background-image: url('19.webp');
+  background-size: cover;
+  background-position: center;
+  background-color:#e4a663
+}
+
+main.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.title {
+  
+  max-width: 900px; /* Container width */
+  padding: 20px;
+  background-color: rgb(33, 27, 27, 0.8);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;                /* Use flexbox */
+  flex-direction: column;       /* Stack the items vertically */
+  align-items: center;          /* Center horizontally */
+  text-align: center;  
+  
+}
+
+.welcome-frame, .mission-frame, .features-frame, .choose-frame {
+  background-color: rgba(14, 9, 9, 0.8); /* Dark transparent background */
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Full width on smaller screens */
+  box-sizing: border-box; /* Ensures padding is included in the element's width */
+}
+
+.frame-row {
   display: flex;
-  min-height: 100vh;
-  flex-direction: column;
+
+  justify-content: space-between; /* Space between the frames */
+  gap: 20px; /* Space between each frame */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+/* Ensure each frame takes 48% of the container width (leaving space for the gap) */
+.frame-row .welcome-frame, .frame-row .mission-frame,
+.frame-row .features-frame, .frame-row .choose-frame {
+  width: 48%; /* Adjust the width to fit 2 frames per row */
+}
+
+.welcome-frame h3, .mission-frame h3, .features-frame h3, .choose-frame h3 {
+  font-size: 1.8rem;
+  color: #e8ebed; /* Blue color for headers */
+  margin-bottom: 10px;
+}
+
+.welcome-frame h5, .mission-frame h5, .features-frame h5, .choose-frame h5 {
+  font-size: 1.2rem;
+  color: #f7dffd;
+  margin-bottom: 15px;
+}
+
+/* Adjust margins and padding between sections */
+h1 {
+  font-size: 2.5rem;
+  text-align: left;
+  margin-bottom: 30px;
+  color: #f1f1f1;
+}
+
+h2 {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #f1f1f1;
+}
+
+h3 {
+  font-size: 2rem;
+  color: #333;
+  text-align: center;
+}
+
+/* Text within transparent frames */
+h5 {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Style the "Features" and "Why Choose Us" sections */
+.features-frame b, .choose-frame b {
+  color: #c669de;
+}
+
+main.container {
+  max-width: 900px; /* Limit the width of the content */
+  margin: 40px auto; /* Center the content */
+  padding: 20px;
+  background-color: rgba(26, 22, 22, 0.9); /* Set a white background for the content */
+  border-radius: 8px; /* Add rounded corners for a smooth design */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow effect */
+}
+
+main.container h3, main.container h5 {
+  padding: 10px;
+}
+
+/* Additional spacing */
+h1, h3, h5 {
+  margin-bottom: 15px;
+
+/*   min-height: 100vh;
+  flex-direction: column; */
 
 }
 
@@ -18,6 +136,538 @@ footer.page-footer {
 .card-content {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items:flex-start; 
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
+
+
+.profile-container {
+  max-width: 900px; /* Container width */
+  margin: 20px auto; /* Center the profile container */
+  padding: 20px;
+  background-color: rgba(21, 19, 19, 0.8);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for clean look */
+  display: flex;                /* Use flexbox */
+  flex-direction: column;       /* Stack the items vertically */
+  align-items: center;          /* Center horizontally */
+  text-align: center;           /* Center the text */
+}
+
+/* Profile Image - making it circular */
+.profile-image {
+  width: 150px; /* Size of the profile image */
+  height: 150px; /* Size of the profile image */
+  border-radius: 50%; /* Circular shape */
+  object-fit: cover; /* Ensures the image covers the entire area */
+  border: 3px solid #c669de; /* Optional border color around image */
+  margin-bottom: 20px; /* Space below the image */
+  align-items: center; 
+}
+
+/* Styling the profile details (text) */
+.profile-info {
+  margin-top: 20px;
+  width: 100%; /* Ensure the profile info takes full width */
+  display: flex;
+  flex-direction: column; /* Stack the details vertically */
+  align-items: center;    /* Center the details horizontally */
+}
+
+/* Profile details - text inside */
+.profile-detail {
+  font-size: 1.2rem; /* Larger font for details */
+  color: #fcf9f9; /* Text color */
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* Edit Link Styling */
+.edit-link {
+  background-color: rgba(76, 34, 88, 0.8); 
+  padding: 10px;
+  border-radius: 20px;
+  text-align: center;
+  color: #c669de; /* Purple color */
+  font-size: 1.2rem; /* Slightly larger text */
+  text-decoration: none; /* Remove underline */
+  font-weight: bold;
+  transition: color 0.3s ease; /* Smooth transition on hover */
+}
+
+.edit-link:hover {
+  color: #9b44a6; /* Darker purple on hover */
+}
+
+/* Subscribe Link Styling */
+.subscribe-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #c669de; /* Purple color */
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.subscribe-link:hover {
+  color: #9b44a6; /* Darker purple on hover */
+}
+
+/* Create Profile Link Styling */
+.create-profile {
+  color: #c669de; /* Purple color */
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.create-profile:hover {
+  color: #9b44a6; /* Darker purple on hover */
+}
+
+
+
+.card-title {
+  font-size: 1.8rem; /* Larger font size for the gym name */
+  color: #c669de; /* Purple color for the gym name */
+  margin-bottom: 10px; /* Space below the title */
+}
+
+.card p {
+  font-size: 1.2rem; /* Larger text for the description */
+  margin-bottom: 8px; /* Space between paragraphs */
+  color: #f7f7f7; /* Light text color for the paragraphs */
+}
+
+.card a {
+  color: #c669de; /* Purple color for the link */
+  text-decoration: none; /* Remove underline */
+  font-weight: bold;
+  transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.card a:hover {
+  color: #9b44a6; /* Darker purple on hover */
+} 
+/* Sidebar Styles */
+.sidebar {
+  width: 250px; /* Width of the sidebar */
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  
+  background-color: #022f60; /* Sidebar background color */
+  padding-top: 20px;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1); /* Slight shadow on the right edge */
+}
+
+.sidebar .brand-logo {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 0 10px;
+  text-transform: uppercase;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  margin: 15px 0;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 10px 20px;
+  display: block;
+  text-transform: uppercase;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, padding-left 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  padding-left: 30px;
+}
+
+/* Logout Button Styling */
+.sidebar form button.logout-btn {
+  background-color: #da5b68; /* Red color */
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.sidebar form button.logout-btn:hover {
+  background-color: #c82333; /* Darker red on hover */
+}
+
+/* Main Content Area */
+.main-content {
+  margin-left: 250px; /* Make room for the sidebar */
+  padding: 20px;
+}
+
+.page-footer {
+  text-align: center;
+  background-color: #f1f1f1;
+  padding: 10px;
+}
+
+/* Responsive Design for Mobile */
+@media only screen and (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+
+.trainrtcontainer{
+  display: block;
+}
+
+/* Styling for the Gym Details Header */
+.gym-details-header {
+  display: flex; /* Use flexbox to align items horizontally */
+  justify-content: space-between; /* Space between the title and the image */
+  align-items: center; /* Vertically align the title and the image in the center */
+  margin-bottom: 30px; /* Space below the header */
+}
+
+.gym-details-header h1 {
+  font-size: 2.5rem;
+  color: #f1f1f1;
+  margin-right: 20px; /* Add space between title and trainer image */
+}
+
+/* Container for the trainer title and images */
+.trainer-header {
+  display: flex; /* Align items horizontally in a row */
+  align-items: center; /* Vertically align the title and images */
+  margin-bottom: 20px; /* Space below the trainer section */
+}
+
+/* Styling for the trainer title */
+.trainer-header h3 {
+  font-size: 2rem; /* Title size */
+  color: #f1f1f1; /* Title color */
+  margin-right: 20px; /* Space between the title and images */
+}
+
+/* Container for the trainer images (multiple trainers) */
+.trainer-images {
+  display: flex; /* Align images in a row */
+  gap: 10px; /* Space between images */
+  margin-right: 100px;
+}
+ 
+/* Styling for the individual trainer image */
+.trainer-image {
+  width: 80px; /* Adjust the size of the trainer image */
+  height: 150px; /* Maintain aspect ratio */
+  border-radius: 50%; /* Make the image circular */
+  object-fit: cover; /* Ensure the image covers the circular area */
+  margin-right: 100px;
+}
+
+
+/* Existing Styles */
+.card-content.gym-info {
+  width: 60%; /* Gym information box will take 60% of the card */
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  color: #f7f7f7;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-content.trainer-info {
+  width: 35%; /* Trainer info box will take 35% of the card */
+  padding: 20px;
+  background-color: rgba(14, 9, 9, 0.8);
+  border-radius: 8px;
+  color: #f7f7f7;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 20px; /* Margin between gym info and trainer info */
+}
+
+.card-content {
+  display: flex; /* Flexbox layout */
+  justify-content: space-between;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.card-title {
+  font-size: 1.8rem;
+  color: #c669de;
+}
+
+ul {
+  padding-left: 0;
+}
+
+ul li {
+  list-style: none;
+  margin-bottom: 15px;
+}
+
+ul li img {
+  border-radius: 50%; /* Circular trainer images */
+  margin-right: 10px;
+}
+
+ul li h4 {
+  display: inline-block;
+  margin: 0;
+  color: #f7f7f7;
+  font-size: 1.2rem;
+  vertical-align: middle;
+}
+
+/* Adjust for smaller screens */
+@media only screen and (max-width: 768px) {
+  .gym-details-header {
+    flex-direction: column; /* Stack title and image vertically on smaller screens */
+    align-items: center; /* Center the content */
+  }
+
+  .card-content.gym-info, .card-content.trainer-info {
+    width: 100%; /* Full width for smaller screens */
+    margin: 10px 0; /* Add margin between the sections */
+  }
+
+  .card-content {
+    flex-direction: column; /* Stack the sections vertically */
+    align-items: center;
+  }
+}
+
+/* Trainer Page Styles */
+.trainer-page {
+  display: flex;
+  justify-content: space-between; /* Space between the image and information */
+  padding: 30px;
+  background-color: rgb(17, 14, 25); /* Same background as your main page */
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trainer-page div {
+  flex: 1;
+}
+
+.trainer-page img {
+  width: 150px; /* Keep the image size small */
+  height: 200px;
+  border-radius: 50%; /* Make image circular */
+  object-fit: cover; /* Ensure the image fits well */
+  margin-right: 20px; /* Space between the image and text */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow around image */
+}
+
+.trainer-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  text-align: left;
+}
+
+.trainer-info h1.trainers {
+ 
+  font-size: 2.5rem;
+  color: #f1f1f1;
+  margin-bottom: 15px; /* Space below the name */
+  text-align: left;
+  
+}
+
+.trainer-info h5.trainers {
+  font-size: 1.4rem;
+  color: #f7f7f7;
+  font-weight: bold;
+  margin-bottom: 20px; /* Space below specialties */
+  text-align: left;
+}
+
+.trainer-info h3.trainers {
+  font-size: 1.2rem;
+  color: #fcf9f9;
+  line-height: 1.6;
+  text-align: left;
+}
+
+/* Edit and Delete Links */
+.trainer-page a {
+  background-color: #c669de; /* Purple background */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.trainer-page a:hover {
+  background-color: #9b44a6; /* Darker purple on hover */
+}
+
+.trainer-page a + a {
+  margin-left: 10px; /* Space between Edit and Delete links */
+}
+
+/* Subscription Page Styling */
+.subscription-container {
+  max-width: 900px; /* Limit the width of the content */
+  margin: 40px auto; /* Center the content */
+  padding: 20px;
+  background-color: rgba(30, 26, 26, 0.8); /* Dark background for the container */
+  border-radius: 8px; /* Rounded corners for the container */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
+}
+
+.subscription-title {
+  font-size: 2.5rem;
+  text-align: center;
+  color: #f1f1f1;
+  margin-bottom: 30px;
+}
+
+.package-list {
+  list-style-type: none; /* Remove bullet points */
+  padding: 0;
+  margin: 0;
+}
+
+.package-item {
+  background-color: rgba(14, 9, 9, 0.8); /* Dark transparent background */
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+}
+
+.package-name {
+  font-size: 2rem;
+  color: #c669de; /* Purple color for package names */
+  margin-bottom: 10px;
+}
+
+.package-description {
+  font-size: 1.2rem;
+  color: #f7f7f7;
+  margin-bottom: 15px;
+}
+
+.subscribe-form {
+  text-align: center;
+}
+
+.subscribe-button {
+  background-color: #c669de; /* Purple color */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.subscribe-button:hover {
+  background-color: #9b44a6; /* Darker purple on hover */
+}
+
+.messages {
+  margin-bottom: 30px;
+}
+
+.alert {
+  background-color: rgba(233, 62, 62, 0.8);
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+/* Style for the login form container */
+.login-container {
+  background-color: rgba(0, 0, 0, 0.7); /* Black transparent background */
+  padding: 30px;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slight shadow effect */
+  width: 400px; /* Limit the width of the form */
+  margin: 40px auto; /* Center the form on the page */
+}
+
+/* Style for the form header */
+.login-container h1 {
+  color: #f1f1f1; /* Light color for the header */
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Style for the form inputs */
+.login-container input[type="text"], 
+.login-container input[type="password"] {
+  width: 100%; /* Full width for the inputs */
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #c669de; /* Purple border */
+  background-color: rgba(255, 255, 255, 0.8); /* Slight white background */
+  color: #333; /* Dark text for inputs */
+}
+
+/* Style for the submit button */
+.login-container input[type="submit"] {
+  background-color: #c669de; /* Purple background */
+  align-items: center;
+  color: white;
+  padding: 8px 16px; /* Smaller padding for a smaller button */
+  font-size: 1rem; /* Smaller font size */
+  border: none;
+  border-radius: 5px;
+  width: auto; /* Adjust width to fit content */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for submit button */
+.login-container input[type="submit"]:hover {
+  background-color: #9b44a6; /* Darker purple on hover */
+}
+
+.regist-container {
+  background-color: rgba(0, 0, 0, 0.7); 
+  padding: 30px;
+  margin: 20px;
+  border-radius: 10px;
+}
