@@ -51,9 +51,15 @@ def subscribe_to_package(request, package_id):
     user_profile = Profile.objects.get(user=request.user)
     
     # Check if the user already has an active subscription
-    active_subscription = Subscription.objects.filter(user=request.user, status='Active').exists()
+    active_subscription = Subscription.objects.filter(user=request.user, status='Active').first()
 
     if active_subscription:
+        # Check if the current active subscription has expired
+        today = timezone.now().date()
+        if active_subscription.endDate < today:  # If the active subscription has expired
+            active_subscription.status = 'Inactive'  # Change the status to 'Inactive'
+            active_subscription.save()
+
         # Notify the user that they already have an active subscription
         messages.warning(request, "You already have an active subscription. Please wait for it to expire before subscribing to a new one.")
         
@@ -109,28 +115,6 @@ def subscription_package_list(request):
     return render(request, 'main_app/subscription_package_list.html', {'packages': packages})
 
 
-# register views
-# @login_required
-# def register_for_session(request, session_id):
-#     session = Session.objects.filter(id=session_id).first()
-
-#     # If the session doesn't exist, redirect to the session list
-#     if not session:
-#         return redirect('session_list')
-
-#     # Check if the user is already registered for the session
-#     if Registration.objects.filter(user=request.user, session=session).exists():
-#         return redirect('session_detail', session_id=session.id)
-
-#     # Create a new registration
-#     Registration.objects.create(
-#         session=session,
-#         user=request.user,
-#         date_registered=timezone.now().date()
-#     )
-
-#     # Redirect the user to the list of their registrations
-#     return redirect('view_my_registrations')
 
 def register_for_session(request, session_id):
     # Retrieve the session
@@ -153,13 +137,13 @@ def register_for_session(request, session_id):
     if Registration.objects.filter(user=request.user, session=session).exists():
         # If already registered, inform the user
         messages.info(request, "You are already registered for this session.")
-        return redirect('session_index')
+        return redirect('session_list')
     
     # Check if there are available seats for the session
     if session.seats <= 0:
         # If no seats are available, inform the user
         messages.warning(request, "Sorry, no seats are available for this session.")
-        return redirect('session_index')
+        return redirect('session_list')
 
     # Create a new registration
     Registration.objects.create(
@@ -178,23 +162,6 @@ def register_for_session(request, session_id):
     # Redirect the user to the list of their registrations
     return redirect('view_my_registrations')
 
-
-# @login_required
-# def view_my_registrations(request):
-#     user_profile = request.user.profile
-#     # user = registration.user
-    
-#     # Check if the user is a Gym Owner (GO) or a Regular User (NU)
-#     if user_profile.type == 'GO':
-#         print(1)
-#         # gym = Gym.objects.filter(user=user).first()
-#         # if gym:
-#         #     registrations = Registration.objects.filter(gym=gym)
-#     else:
-#         # If Regular User, show only their registrations
-#         registrations = Registration.objects.filter(user=request.user)
-
-#     return render(request, 'main_app/my_registrations.html', {'registrations': registrations})
 
 
 @login_required
@@ -219,13 +186,27 @@ def view_my_registrations(request):
 
 
 
+# # subscription view
+# @login_required
+# def view_my_subscriptions(request):
+#     subscriptions = Subscription.objects.filter(user=request.user)  # Filter subscriptions by the logged-in user
+#     return render(request, 'main_app/my_subscriptions.html', {'subscriptions': subscriptions})
 
-# subscription view
+
+
+
 @login_required
 def view_my_subscriptions(request):
     subscriptions = Subscription.objects.filter(user=request.user)  # Filter subscriptions by the logged-in user
-    return render(request, 'main_app/my_subscriptions.html', {'subscriptions': subscriptions})
+    today = timezone.now().date()
 
+    # Check for expired subscriptions and update their status
+    for subscription in subscriptions:
+        if subscription.endDate < today and subscription.status == 'Active':  # If the subscription has expired
+            subscription.status = 'Inactive'  # Change the status to Inactive
+            subscription.save()
+
+    return render(request, 'main_app/my_subscriptions.html', {'subscriptions': subscriptions})
 
 
 class ProfileCreate(CreateView):
@@ -311,6 +292,10 @@ class SessionList(LoginRequiredMixin, ListView):
 
 
 
+
+
+
+
 class SessionDetail(LoginRequiredMixin, DetailView):
     model = Session
 
@@ -340,7 +325,7 @@ class SessionDetail(LoginRequiredMixin, DetailView):
 
 class SessionCreate(LoginRequiredMixin, CreateView):
     model = Session
-    fields = ['name','location', 'time','date','seats','price', 'avalibility']
+    fields = ['name','location', 'time','date','seats','price']
     
 
     def form_valid(self, form):
@@ -351,6 +336,8 @@ class SessionCreate(LoginRequiredMixin, CreateView):
 
     # Redirect the user after successful form submission
     success_url = '/session/'
+
+
 
 
 
