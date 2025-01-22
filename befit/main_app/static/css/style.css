@@ -5,7 +5,8 @@ body {
   background-image: url('19.webp');
   background-size: cover;
   background-position: center;
-  background-color:#e4a663
+  align-items: center;
+  background-color: #1c1c1c;
 }
 
 main.container {
@@ -17,22 +18,10 @@ main.container {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-
-.title {
-  
-  max-width: 900px; /* Container width */
-  padding: 20px;
-  background-color: rgb(33, 27, 27, 0.8);
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;                /* Use flexbox */
-  flex-direction: column;       /* Stack the items vertically */
-  align-items: center;          /* Center horizontally */
-  text-align: center;  
-  
-}
-
-.welcome-frame, .mission-frame, .features-frame, .choose-frame {
+.welcome-frame,
+.mission-frame,
+.features-frame,
+.choose-frame {
   background-color: rgba(14, 9, 9, 0.8); /* Dark transparent background */
   padding: 20px;
   margin: 20px 0;
@@ -40,6 +29,7 @@ main.container {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%; /* Full width on smaller screens */
   box-sizing: border-box; /* Ensures padding is included in the element's width */
+  text-align: center;
 }
 
 .frame-row {
@@ -51,18 +41,26 @@ main.container {
 }
 
 /* Ensure each frame takes 48% of the container width (leaving space for the gap) */
-.frame-row .welcome-frame, .frame-row .mission-frame,
-.frame-row .features-frame, .frame-row .choose-frame {
+.frame-row .welcome-frame,
+.frame-row .mission-frame,
+.frame-row .features-frame,
+.frame-row .choose-frame {
   width: 48%; /* Adjust the width to fit 2 frames per row */
 }
 
-.welcome-frame h3, .mission-frame h3, .features-frame h3, .choose-frame h3 {
+.welcome-frame h3,
+.mission-frame h3,
+.features-frame h3,
+.choose-frame h3 {
   font-size: 1.8rem;
   color: #e8ebed; /* Blue color for headers */
   margin-bottom: 10px;
 }
 
-.welcome-frame h5, .mission-frame h5, .features-frame h5, .choose-frame h5 {
+.welcome-frame h5,
+.mission-frame h5,
+.features-frame h5,
+.choose-frame h5 {
   font-size: 1.2rem;
   color: #f7dffd;
   margin-bottom: 15px;
@@ -71,9 +69,10 @@ main.container {
 /* Adjust margins and padding between sections */
 h1 {
   font-size: 2.5rem;
-  text-align: left;
+  text-align: center;
   margin-bottom: 30px;
   color: #f1f1f1;
+  text-shadow: 5px 1px black;
 }
 
 h2 {
@@ -97,7 +96,8 @@ h5 {
 }
 
 /* Style the "Features" and "Why Choose Us" sections */
-.features-frame b, .choose-frame b {
+.features-frame b,
+.choose-frame b {
   color: #c669de;
 }
 
@@ -105,22 +105,29 @@ main.container {
   max-width: 900px; /* Limit the width of the content */
   margin: 40px auto; /* Center the content */
   padding: 20px;
-  background-color: rgba(26, 22, 22, 0.9); /* Set a white background for the content */
+  background-color: rgba(
+    26,
+    22,
+    22,
+    0.9
+  ); /* Set a white background for the content */
   border-radius: 8px; /* Add rounded corners for a smooth design */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow effect */
 }
 
-main.container h3, main.container h5 {
+main.container h3,
+main.container h5 {
   padding: 10px;
 }
 
 /* Additional spacing */
-h1, h3, h5 {
+h1,
+h3,
+h5 {
   margin-bottom: 15px;
 
-/*   min-height: 100vh;
+  /*   min-height: 100vh;
   flex-direction: column; */
-
 }
 
 main {
@@ -132,15 +139,12 @@ footer.page-footer {
   text-align: right;
 }
 
-
 .card-content {
   display: flex;
   justify-content: space-between;
-  align-items:flex-start; 
+  align-items: flex-start;
   background-color: rgba(0, 0, 0, 0.8);
 }
-
-
 
 .profile-container {
   max-width: 900px; /* Container width */
@@ -149,10 +153,10 @@ footer.page-footer {
   background-color: rgba(21, 19, 19, 0.8);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for clean look */
-  display: flex;                /* Use flexbox */
-  flex-direction: column;       /* Stack the items vertically */
-  align-items: center;          /* Center horizontally */
-  text-align: center;           /* Center the text */
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Stack the items vertically */
+  align-items: center; /* Center horizontally */
+  text-align: center; /* Center the text */
 }
 
 /* Profile Image - making it circular */
@@ -163,7 +167,7 @@ footer.page-footer {
   object-fit: cover; /* Ensures the image covers the entire area */
   border: 3px solid #c669de; /* Optional border color around image */
   margin-bottom: 20px; /* Space below the image */
-  align-items: center; 
+  align-items: center;
 }
 
 /* Styling the profile details (text) */
@@ -172,7 +176,7 @@ footer.page-footer {
   width: 100%; /* Ensure the profile info takes full width */
   display: flex;
   flex-direction: column; /* Stack the details vertically */
-  align-items: center;    /* Center the details horizontally */
+  align-items: center; /* Center the details horizontally */
 }
 
 /* Profile details - text inside */
@@ -185,7 +189,7 @@ footer.page-footer {
 
 /* Edit Link Styling */
 .edit-link {
-  background-color: rgba(76, 34, 88, 0.8); 
+  background-color: rgba(76, 34, 88, 0.8);
   padding: 10px;
   border-radius: 20px;
   text-align: center;
@@ -228,8 +232,6 @@ footer.page-footer {
   color: #9b44a6; /* Darker purple on hover */
 }
 
-
-
 .card-title {
   font-size: 1.8rem; /* Larger font size for the gym name */
   color: #c669de; /* Purple color for the gym name */
@@ -251,7 +253,7 @@ footer.page-footer {
 
 .card a:hover {
   color: #9b44a6; /* Darker purple on hover */
-} 
+}
 /* Sidebar Styles */
 .sidebar {
   width: 250px; /* Width of the sidebar */
@@ -283,7 +285,7 @@ footer.page-footer {
 }
 
 .sidebar ul li {
-  margin: 10px 0;
+  margin: 0;
 }
 
 .sidebar ul li a {
@@ -307,12 +309,12 @@ footer.page-footer {
   background-color: #da5b68; /* Red color */
   color: white;
   border: none;
-  padding: 12px 20px;
+  padding: 15px 30px;
   font-size: 16px;
   text-align: center;
   width: 100%;
   border-radius: 5px;
-  margin-top: 20px;
+  margin-top: 5px;
   cursor: pointer;
 }
 
@@ -343,8 +345,7 @@ footer.page-footer {
   }
 }
 
-
-.trainrtcontainer{
+.trainrtcontainer {
   display: block;
 }
 
@@ -382,7 +383,7 @@ footer.page-footer {
   gap: 10px; /* Space between images */
   margin-right: 100px;
 }
- 
+
 /* Styling for the individual trainer image */
 .trainer-image {
   width: 80px; /* Adjust the size of the trainer image */
@@ -391,7 +392,6 @@ footer.page-footer {
   object-fit: cover; /* Ensure the image covers the circular area */
   margin-right: 100px;
 }
-
 
 /* Existing Styles */
 .card-content.gym-info {
@@ -416,7 +416,7 @@ footer.page-footer {
 .card-content {
   display: flex; /* Flexbox layout */
   justify-content: space-between;
-  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  /* flex-wrap: wrap; Allow wrapping on smaller screens */
 }
 
 .card-title {
@@ -453,7 +453,8 @@ ul li h4 {
     align-items: center; /* Center the content */
   }
 
-  .card-content.gym-info, .card-content.trainer-info {
+  .card-content.gym-info,
+  .card-content.trainer-info {
     width: 100%; /* Full width for smaller screens */
     margin: 10px 0; /* Add margin between the sections */
   }
@@ -492,16 +493,14 @@ ul li h4 {
   display: flex;
   flex-direction: column;
   justify-content: left;
-  text-align: left;
+  text-align: center;
 }
 
 .trainer-info h1.trainers {
- 
   font-size: 2.5rem;
   color: #f1f1f1;
   margin-bottom: 15px; /* Space below the name */
-  text-align: left;
-  
+  text-align: center;
 }
 
 .trainer-info h5.trainers {
@@ -509,14 +508,14 @@ ul li h4 {
   color: #f7f7f7;
   font-weight: bold;
   margin-bottom: 20px; /* Space below specialties */
-  text-align: left;
+  text-align: center;
 }
 
 .trainer-info h3.trainers {
   font-size: 1.2rem;
   color: #fcf9f9;
   line-height: 1.6;
-  text-align: left;
+  text-align: center;
 }
 
 /* Edit and Delete Links */
@@ -545,7 +544,12 @@ ul li h4 {
   max-width: 900px; /* Limit the width of the content */
   margin: 40px auto; /* Center the content */
   padding: 20px;
-  background-color: rgba(30, 26, 26, 0.8); /* Dark background for the container */
+  background-color: rgba(
+    30,
+    26,
+    26,
+    0.8
+  ); /* Dark background for the container */
   border-radius: 8px; /* Rounded corners for the container */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
 }
@@ -624,7 +628,8 @@ ul li h4 {
   border-radius: 8px; /* Rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slight shadow effect */
   width: 400px; /* Limit the width of the form */
-  margin: 40px auto; /* Center the form on the page */
+  margin: 40px auto; /* Center the form on the page
+  */
 }
 
 /* Style for the form header */
@@ -636,19 +641,20 @@ ul li h4 {
 }
 
 /* Style for the form inputs */
-.login-container input[type="text"], 
-.login-container input[type="password"] {
+.login-container input[type='text'],
+input[type='number'],
+.login-container input[type='password'] {
   width: 100%; /* Full width for the inputs */
   padding: 10px;
   margin-bottom: 20px;
   border-radius: 5px;
   border: 1px solid #c669de; /* Purple border */
   background-color: rgba(255, 255, 255, 0.8); /* Slight white background */
-  color: #333; /* Dark text for inputs */
+  color: #ffffff; /* Dark text for inputs */
 }
 
 /* Style for the submit button */
-.login-container input[type="submit"] {
+.login-container input[type='submit'] {
   background-color: #c669de; /* Purple background */
   align-items: center;
   color: white;
@@ -662,13 +668,158 @@ ul li h4 {
 }
 
 /* Hover effect for submit button */
-.login-container input[type="submit"]:hover {
+.login-container input[type='submit']:hover {
   background-color: #9b44a6; /* Darker purple on hover */
 }
 
 .regist-container {
-  background-color: rgba(0, 0, 0, 0.7); 
+  background-color: rgba(0, 0, 0, 0.7);
   padding: 30px;
   margin: 20px;
   border-radius: 10px;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-content {
+  display: block;
+  text-align: center;
+}
+
+form {
+  width: 100%;
+}
+
+p {
+  font-size: large;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.center {
+  text-align: center;
+  align-items: center;
+  margin: 20px;
+}
+
+/* session detail */
+/* General Layout */
+.details-container,
+.trainers-container,
+.add-trainers-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.7); /* Black transparent background */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Section Headers */
+.details-container h1,
+.trainers-container h1,
+.add-trainers-container h3 {
+  font-size: 2rem;
+  text-align: center;
+  color: #ffffff;
+}
+
+.trainers-container {
+  margin-top: 30px;
+}
+
+.trainer-action-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.trainers-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.trainer-picture {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.trainer-picture img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Session Details */
+.session-details .session-card-title {
+  font-size: 2rem;
+  color: #cfcfcf;
+}
+
+.session-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.session-registration-action {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.register-btn {
+  background-color: #c669de;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.register-btn:hover {
+  background-color: #9b44a6;
+}
+
+.add-btn,
+.delete-btn {
+  background-color: #9b44a6;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-btn:hover,
+.delete-btn:hover {
+  background-color: #e100ff;
+}
+
+/* Responsiveness */
+@media only screen and (max-width: 768px) {
+  .details-container,
+  .trainers-container,
+  .add-trainers-container {
+    padding: 15px;
+  }
+
+  .trainer-picture img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .trainer-action-container {
+    text-align: center;
+  }
+
+  .session-actions {
+    flex-direction: column;
+    align-items: center;
+  }
 }

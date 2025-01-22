@@ -223,12 +223,27 @@ class ProfileCreate(CreateView):
             return '/'
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
-        if form.is_valid():
-            form.instance.isSubscribed = True
-            form.instance.save()
-            return super().form_valid(form)
+        age = form.instance.age
+        weight = form.instance.weight
+        height = form.instance.height
 
+        if age < 0:
+            form.add_error('age', 'Age cannot be less than 0.')
+            return self.form_invalid(form)
+
+        if weight < 0:
+            form.add_error('weight', 'Weight cannot be less than 0.')
+            return self.form_invalid(form)
+
+        if height < 0:
+            form.add_error('height', 'Height cannot be less than 0.')
+            return self.form_invalid(form)
+
+        # If validation passes, set additional fields
+        form.instance.user = self.request.user
+        form.instance.isSubscribed = True
+
+        return super().form_valid(form)
 
 
 class ProfileUpdate(UpdateView):
@@ -331,7 +346,17 @@ class SessionCreate(LoginRequiredMixin, CreateView):
     
 
     def form_valid(self, form):
-        # Set the user to the currently authenticated user
+        seats = form.instance.seats
+        price = form.instance.price
+
+        if seats <= 0:
+            form.add_error('seats', 'seats cannot be less than 0.')
+            return self.form_invalid(form)
+
+        if price < 0:
+            form.add_error('price', 'Price cannot be less than 0.')
+            return self.form_invalid(form)
+
         form.instance.user = self.request.user
         form.instance.gym = Gym.objects.get(user=self.request.user)
         return super().form_valid(form)
@@ -365,6 +390,12 @@ class TrainerCreate(LoginRequiredMixin, CreateView):
     fields = ['name', 'age', 'image', 'specialties', 'description']
 
     def form_valid(self, form):
+        age = form.instance.age
+
+        if age <= 0:
+            form.add_error('age', 'Age cannot be less than or equal 0.')
+            return self.form_invalid(form)
+
         form.instance.gym = Gym.objects.get(user=self.request.user)
         return super().form_valid(form)
     

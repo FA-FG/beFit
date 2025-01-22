@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+from datetime import date
+
 
 
 GENDER = (
@@ -82,11 +84,11 @@ class Session(models.Model):
     name = models.CharField(max_length=50)
     location = models.CharField(max_length=20)
     time = models.CharField(max_length=50)
-    date = models.CharField(max_length=20)
+    date = models.DateField()
     trainers = models.ManyToManyField(Trainer)
-    # avalibility = models.BooleanField(default=True)
+    avalibility = models.BooleanField(default=True)
     price = models.FloatField(default=0.0)
-    seats = models.IntegerField(default=20)
+    seats = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     gym = models.ForeignKey(Gym, on_delete=models.CASCADE)
     
