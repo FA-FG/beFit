@@ -259,7 +259,8 @@ footer.page-footer {
   top: 0;
   left: 0;
   height: 100%;
-  
+  justify-content: space-around;
+
   background-color: #022f60; /* Sidebar background color */
   padding-top: 20px;
   box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1); /* Slight shadow on the right edge */
@@ -282,7 +283,7 @@ footer.page-footer {
 }
 
 .sidebar ul li {
-  margin: 15px 0;
+  margin: 10px 0;
 }
 
 .sidebar ul li a {

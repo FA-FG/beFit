@@ -60,6 +60,8 @@ def subscribe_to_package(request, package_id):
             active_subscription.status = 'Inactive'  # Change the status to 'Inactive'
             active_subscription.save()
 
+     
+
         # Notify the user that they already have an active subscription
         messages.warning(request, "You already have an active subscription. Please wait for it to expire before subscribing to a new one.")
         
