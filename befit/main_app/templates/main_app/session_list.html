@@ -3,17 +3,22 @@
 <div class="login-container">
 <h1>Session List</h1>
 
-{% for session in session_list %}
+{% if not session_list %}
+  <p>You don't have any sessions to view. Please create a session.</p>
+  <a href="{% url 'session_create' %}">Add a Session</a>
 
-
-  <a href="{% url 'session_detail' session.id %}">
-    <div class="card">
+{% else %}
+  {% for session in session_list %}
+    <a href="{% url 'session_detail' session.id %}">
+      <div class="card">
         <div class="card-content">
-            <span class="card-title">{{ session.name }}</span>
-            <p>Location: {{ session.location }}</p>
+          <span class="card-title">{{ session.name }}</span>
+          <p>Location: {{ session.location }}</p>
         </div>
+
     </div>
   </a>
 {% endfor %}
 </div>
 {% endblock %}
+

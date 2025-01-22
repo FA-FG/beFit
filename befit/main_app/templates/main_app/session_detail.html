@@ -9,6 +9,9 @@
       <div class="card-content">
         <span class="card-title">{{ session.name }}</span>
         <p>location: {{ session.location }}</p>
+        <p>Price: {{ session.price }} BD</p>
+          <p>Seats Available: {{session.seats}}</p>
+        </div>
       </div>
       {% if request.user == session.user %}
       <div class="card-action">
@@ -19,17 +22,19 @@
     </div>
    
     <!-- Registration Button -->
-    {% if not user in session.registrations.all %}
-    <div class="card-action">
-      <form action="{% url 'register_for_session' session.id %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn">Register</button>
-      </form>
-    </div>
-    {% else %}
-    <div class="card-action">
-      <span>You are already registered for this session.</span>
-    </div>
+     {% if user.profile.type == "NU" %}
+      {% if not user in session.registrations.all %}
+      <div class="card-action">
+        <form action="{% url 'register_for_session' session.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn">Register</button>
+        </form>
+      </div>
+      {% else %}
+      <div class="card-action">
+        <span>You are already registered for this session.</span>
+      </div>
+      {% endif %}
     {% endif %}
   </div>
 </div>
