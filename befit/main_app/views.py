@@ -294,19 +294,42 @@ class GymDelete(LoginRequiredMixin, DeleteView):
 
 
 
+# class SessionList(LoginRequiredMixin, ListView):
+#     model = Session
+#     template_name = 'session/index.html'  # Ensure this is the correct template
+    
+#     def get_queryset(self):
+#         # Check if the user is a Gym Owner (GO) or Normal User (NU)
+#         if self.request.user.profile.type == 'NU':
+#             # If Normal User, get all sessions
+#             return Session.objects.all()
+#         else:
+#             # If Gym Owner, get only sessions related to the gym owned by the user
+#             return Session.objects.filter(user=self.request.user)
+
+
 class SessionList(LoginRequiredMixin, ListView):
     model = Session
     template_name = 'session/index.html'  # Ensure this is the correct template
     
     def get_queryset(self):
-        # Check if the user is a Gym Owner (GO) or Normal User (NU)
+        # If the user is a Normal User (NU), filter sessions based on Gym Owner's active subscription
         if self.request.user.profile.type == 'NU':
-            # If Normal User, get all sessions
-            return Session.objects.all()
-        else:
-            # If Gym Owner, get only sessions related to the gym owned by the user
-            return Session.objects.filter(user=self.request.user)
+            # Get the gyms owned by Gym Owners (GO)
+            gyms = Gym.objects.filter(user__profile__type='GO')
+            
+            # Filter sessions related to gyms that have active subscriptions for the Gym Owner (GO)
+            active_gym_owners = [gym.user for gym in gyms if self._has_active_subscription(gym.user)]
+            
+            # Only show sessions that belong to gyms with an active Gym Owner's subscription
+            return Session.objects.filter(gym__user__in=active_gym_owners)
+        
+        # If the user is a Gym Owner (GO), show all sessions for the gym owned by the user
+        return Session.objects.filter(user=self.request.user)
 
+    def _has_active_subscription(self, gym_owner):
+        """Helper method to check if the Gym Owner has an active subscription"""
+        return Subscription.objects.filter(user=gym_owner, status="Active").exists()
 
 
 
@@ -442,14 +465,37 @@ def about(request):
 
 
 # change this to gym_index
-@login_required
-def class_index(request): 
+# @login_required
+# def class_index(request): 
 
+#     if request.user.profile.type == 'NU':
+#         gyms = Gym.objects.all()
+#     else:
+#         gyms = Gym.objects.filter(user=request.user)
+#     return render(request,'gyms/index.html' , {'gyms' : gyms})
+
+@login_required
+def class_index(request):
     if request.user.profile.type == 'NU':
-        gyms = Gym.objects.all()
+        # Get the gyms where the Gym Owner has an active subscription
+        gyms_with_active_subscription = []
+        
+        # Loop through all gyms owned by Gym Owners and check if they have an active subscription
+        for gym in Gym.objects.filter(user__profile__type='GO'):
+            if _has_active_subscription(gym.user):
+                gyms_with_active_subscription.append(gym)
+        
+        gyms = gyms_with_active_subscription
     else:
+        # Gym Owners can see all their gyms
         gyms = Gym.objects.filter(user=request.user)
-    return render(request,'gyms/index.html' , {'gyms' : gyms})
+
+    return render(request, 'gyms/index.html', {'gyms': gyms})
+
+def _has_active_subscription(gym_owner):
+    """Helper method to check if the Gym Owner has an active subscription"""
+    return Subscription.objects.filter(user=gym_owner, status="Active").exists()
+
 
 
 @login_required
