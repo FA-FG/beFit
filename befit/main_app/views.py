@@ -14,32 +14,34 @@ from datetime import timedelta
 from django.contrib import messages 
 
 from django.utils import timezone
+from django.db.models import Q
 
 
+ 
 
 
 # List View - To display all subscription packages
-class SubscriptionPackageListView(ListView):
+class SubscriptionPackageListView(LoginRequiredMixin,ListView):
     model = SubscriptionPackage
     template_name = 'main_app/subscriptions_list.html'
     context_object_name = 'packages'
 
 # Create View - To create a new subscription package
-class SubscriptionPackageCreateView(CreateView):
+class SubscriptionPackageCreateView(LoginRequiredMixin,CreateView):
     model = SubscriptionPackage
     template_name = 'main_app/subscription_package_form.html'
     fields = ['name', 'description', 'duration_days', 'price', 'user_type']
     success_url = reverse_lazy('subscription_package_list')  # Redirect to the list page after creation
 
 # Update View - To update an existing subscription package
-class SubscriptionPackageUpdateView(UpdateView):
+class SubscriptionPackageUpdateView(LoginRequiredMixin,UpdateView):
     model = SubscriptionPackage
     template_name = 'main_app/subscription_package_form.html'
     fields = ['name', 'description', 'duration_days', 'price', 'user_type']
     success_url = reverse_lazy('subscription_package_list')  # Redirect to the list page after updating
 
 # Delete View - To delete a subscription package
-class SubscriptionPackageDeleteView(DeleteView):
+class SubscriptionPackageDeleteView(LoginRequiredMixin,DeleteView):
     model = SubscriptionPackage
     template_name = 'main_app/subscription_package_confirm_delete.html'
     success_url = reverse_lazy('subscription_package_list')  # Redirect to the list page after deletion
@@ -117,7 +119,7 @@ def subscription_package_list(request):
     return render(request, 'main_app/subscription_package_list.html', {'packages': packages})
 
 
-
+@login_required
 def register_for_session(request, session_id):
     # Retrieve the session
     session = Session.objects.filter(id=session_id).first()
@@ -211,7 +213,7 @@ def view_my_subscriptions(request):
     return render(request, 'main_app/my_subscriptions.html', {'subscriptions': subscriptions})
 
 
-class ProfileCreate(CreateView):
+class ProfileCreate(LoginRequiredMixin,CreateView):
     model = Profile
     fields = ['age', 'gender', 'type', 'weight', 'height', 'image']
 
@@ -246,7 +248,7 @@ class ProfileCreate(CreateView):
         return super().form_valid(form)
 
 
-class ProfileUpdate(UpdateView):
+class ProfileUpdate(LoginRequiredMixin,UpdateView):
     model = Profile 
     fields = ['age','weight','height', 'image']
     success_url = '/profile/'
@@ -308,29 +310,65 @@ class GymDelete(LoginRequiredMixin, DeleteView):
 #             return Session.objects.filter(user=self.request.user)
 
 
+# class SessionList(LoginRequiredMixin, ListView):
+#     model = Session
+#     template_name = 'session/index.html'  # Ensure this is the correct template
+    
+#     def get_queryset(self):
+#         # If the user is a Normal User (NU), filter sessions based on Gym Owner's active subscription
+#         if self.request.user.profile.type == 'NU':
+#             # Get the gyms owned by Gym Owners (GO)
+#             gyms = Gym.objects.filter(user__profile__type='GO')
+            
+#             # Filter sessions related to gyms that have active subscriptions for the Gym Owner (GO)
+#             active_gym_owners = [gym.user for gym in gyms if self._has_active_subscription(gym.user)]
+            
+#             # Only show sessions that belong to gyms with an active Gym Owner's subscription
+#             return Session.objects.filter(gym__user__in=active_gym_owners)
+        
+#         # If the user is a Gym Owner (GO), show all sessions for the gym owned by the user
+#         return Session.objects.filter(user=self.request.user)
+
+#     def _has_active_subscription(self, gym_owner):
+#         """Helper method to check if the Gym Owner has an active subscription"""
+#         return Subscription.objects.filter(user=gym_owner, status="Active").exists()
+
+
+
+
 class SessionList(LoginRequiredMixin, ListView):
     model = Session
     template_name = 'session/index.html'  # Ensure this is the correct template
-    
+
     def get_queryset(self):
+        # Get current date and time
+        now = timezone.now()
+
         # If the user is a Normal User (NU), filter sessions based on Gym Owner's active subscription
         if self.request.user.profile.type == 'NU':
             # Get the gyms owned by Gym Owners (GO)
             gyms = Gym.objects.filter(user__profile__type='GO')
-            
+
             # Filter sessions related to gyms that have active subscriptions for the Gym Owner (GO)
             active_gym_owners = [gym.user for gym in gyms if self._has_active_subscription(gym.user)]
             
-            # Only show sessions that belong to gyms with an active Gym Owner's subscription
-            return Session.objects.filter(gym__user__in=active_gym_owners)
+            # Get all sessions that are from gyms with active subscriptions, and filter out passed sessions
+            sessions = Session.objects.filter(gym__user__in=active_gym_owners)
+            sessions = sessions.filter(date__gte=now.date())  # Ensure the session's date is not passed
+
+            # Filter out sessions where the time has already passed for today
+            sessions = sessions.filter(
+                Q(date__gt=now.date()) | Q(time__gte=now.strftime('%H:%M'))  # Ensure time is not passed today
+            )
+            
+            return sessions
         
-        # If the user is a Gym Owner (GO), show all sessions for the gym owned by the user
+        # If the user is a Gym Owner (GO), show all sessions, regardless of whether they are in the future or passed
         return Session.objects.filter(user=self.request.user)
 
     def _has_active_subscription(self, gym_owner):
         """Helper method to check if the Gym Owner has an active subscription"""
         return Subscription.objects.filter(user=gym_owner, status="Active").exists()
-
 
 
 
@@ -365,12 +403,13 @@ class SessionDetail(LoginRequiredMixin, DetailView):
 
 class SessionCreate(LoginRequiredMixin, CreateView):
     model = Session
-    fields = ['name','location', 'time','date','seats','price']
+    fields = ['name','location', 'time','date','seats']
     
 
     def form_valid(self, form):
         seats = form.instance.seats
         price = form.instance.price
+        
 
         if seats <= 0:
             form.add_error('seats', 'seats cannot be less than 0.')
@@ -393,7 +432,7 @@ class SessionCreate(LoginRequiredMixin, CreateView):
 
 class SessionUpdate(LoginRequiredMixin, UpdateView):
     model = Session
-    fields = ['location', 'time','date','seats','price']
+    fields = ['location', 'time','date','seats']
     
 
 
