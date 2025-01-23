@@ -38,7 +38,10 @@
             <li><a href="{% url 'view_my_subscriptions' %}">View My Subscriptions</a></li>
             <li><a href="{% url 'view_my_registrations' %}">Registrations</a></li>
             <li><a href="{% url 'subscription_package_list' %}">Subscription</a></li>
+
+            {% if user.is_staff %}
             <li><a href="{% url 'subscription_list' %}">Manage Subscription</a></li>
+            {% endif %}
 
             <!-- Logout -->
             <form action="{% url 'logout' %}" method="post">
@@ -46,9 +49,18 @@
               <button type="submit" class="logout-btn">Logout</button>
             </form>
           {% else %}
-            <!-- if  user does not have a profile, show only limited options -->
-            <li><a href="{% url 'profile' %}">Profile</a></li>
-            <li><a href="{% url 'about' %}">About</a></li>
+            {% if user.is_staff %}
+              <!-- If the user is an admin (staff), only show "Manage Subscription" and "Logout" -->
+              <li><a href="{% url 'subscription_list' %}">Manage Subscription</a></li>
+            {% endif %}
+
+            <!-- If the user is not an admin, show limited options -->
+            {% if not user.is_staff %}
+              <li><a href="{% url 'profile' %}">Profile</a></li>
+              <li><a href="{% url 'about' %}">About</a></li>
+            {% endif %}
+
+            <!-- Always show the logout button for both admins and non-admins -->
             <form action="{% url 'logout' %}" method="post">
               {% csrf_token %}
               <button type="submit" class="logout-btn">Logout</button>

@@ -672,6 +672,10 @@ input[type='number'],
   background-color: #9b44a6; /* Darker purple on hover */
 }
 
+
+
+
+
 .regist-container {
   background-color: rgba(0, 0, 0, 0.7);
   padding: 30px;
@@ -822,4 +826,65 @@ p {
     flex-direction: column;
     align-items: center;
   }
+}
+
+.datepicker-input {
+  background-color: #ffffff; /* White background */
+  color: #000000; /* Black text color */
+}
+
+/* Change the text color of the datepicker popup */
+.datepicker-date-display, 
+.datepicker-calendar td {
+  color: #000000; /* Black text for date numbers */
+}
+
+/* Change the background color of selected date */
+.datepicker-calendar .active {
+  background-color: #4caf50; /* Green background for selected date */
+  color: white; /* White text for selected date */
+}
+
+/* Change the background color of the calendar header (month/year) */
+.datepicker-header {
+  background-color: #00796b; /* Dark teal background */
+  color: white; /* White text for header */
+}
+
+/* Change the color of the month and year navigation arrows */
+.datepicker-nav span {
+  color: white;
+}
+
+/* Optional: Change the hover color of the days */
+.datepicker-calendar td:hover {
+  background-color: #eeeeee;
+  cursor: pointer;
+}
+
+
+
+
+input, select, textarea {
+  color: white;  /* Set text color to white */
+}
+
+/* Optional: If you want to ensure that the background color of the inputs stays as it is, add a background-color reset */
+input, select, textarea {
+  background-color: inherit;  /* Keep the existing background */
+}
+
+/* Optional: Change the color of the label or placeholder text */
+label {
+  color: white;  /* Make labels white */
+}
+
+/* For the select dropdown options */
+.select-wrapper input.select-dropdown {
+  color: white;  /* Make dropdown text white */
+}
+
+
+input[type="number"], input[type="text"] {
+  color: white;  /* Set text color to white for number or text inputs */
 }
