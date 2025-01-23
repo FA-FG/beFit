@@ -1,7 +1,7 @@
 body {
-  font-family: 'Arial', sans-serif; /* Font for the entire page */
-  line-height: 1.6; /* Line height to make text more readable */
-  color: #f9f8f8; /* Dark gray text color */
+  font-family: 'Arial', sans-serif; 
+  line-height: 1.6;
+  color: #f9f8f8;
   background-image: url('19.webp');
   background-size: cover;
   background-position: center;
@@ -22,13 +22,13 @@ main.container {
 .mission-frame,
 .features-frame,
 .choose-frame {
-  background-color: rgba(14, 9, 9, 0.8); /* Dark transparent background */
+  background-color: rgba(14, 9, 9, 0.8); 
   padding: 20px;
   margin: 20px 0;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Full width on smaller screens */
-  box-sizing: border-box; /* Ensures padding is included in the element's width */
+  width: 100%; 
+  box-sizing: border-box;
   text-align: center;
 }
 
@@ -53,7 +53,7 @@ main.container {
 .features-frame h3,
 .choose-frame h3 {
   font-size: 1.8rem;
-  color: #e8ebed; /* Blue color for headers */
+  color: #e8ebed; 
   margin-bottom: 10px;
 }
 
@@ -103,7 +103,7 @@ h5 {
 
 main.container {
   max-width: 900px; /* Limit the width of the content */
-  margin: 40px auto; /* Center the content */
+  margin: 40px auto;
   padding: 20px;
   background-color: rgba(
     26,
@@ -111,7 +111,7 @@ main.container {
     22,
     0.9
   ); /* Set a white background for the content */
-  border-radius: 8px; /* Add rounded corners for a smooth design */
+  border-radius: 8px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow effect */
 }
 
@@ -319,7 +319,7 @@ footer.page-footer {
 }
 
 .sidebar form button.logout-btn:hover {
-  background-color: #c82333; /* Darker red on hover */
+  background-color: #c82333;
 }
 
 /* Main Content Area */

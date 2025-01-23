@@ -1,24 +1,30 @@
+# Importing necessary modules and classes from Django
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import  LoginRequiredMixin
-from .models import Gym,Session,Subscription, SubscriptionPackage, Profile, Trainer, Registration
 from django.views.generic.edit import CreateView, UpdateView,DeleteView
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
 
 from django.utils import timezone
+# For manipulating time (e.g., adding/subtracting days)
 from datetime import timedelta
 
+# to display messages
 from django.contrib import messages 
 
-from django.utils import timezone
+# combining conditions in queries
 from django.db.models import Q
 
 
- 
+# Importing models for the application
+from .models import Gym,Session,Subscription, SubscriptionPackage, Profile, Trainer, Registration
 
+
+ 
+# subscription packages
 
 # List View - To display all subscription packages
 class SubscriptionPackageListView(LoginRequiredMixin,ListView):
@@ -31,20 +37,21 @@ class SubscriptionPackageCreateView(LoginRequiredMixin,CreateView):
     model = SubscriptionPackage
     template_name = 'main_app/subscription_package_form.html'
     fields = ['name', 'description', 'duration_days', 'price', 'user_type']
-    success_url = reverse_lazy('subscription_package_list')  # Redirect to the list page after creation
+    success_url = reverse_lazy('subscription_list') 
+
 
 # Update View - To update an existing subscription package
 class SubscriptionPackageUpdateView(LoginRequiredMixin,UpdateView):
     model = SubscriptionPackage
     template_name = 'main_app/subscription_package_form.html'
     fields = ['name', 'description', 'duration_days', 'price', 'user_type']
-    success_url = reverse_lazy('subscription_package_list')  # Redirect to the list page after updating
+    success_url = reverse_lazy('subscription_list')  # Redirect to the list page after updating
 
 # Delete View - To delete a subscription package
 class SubscriptionPackageDeleteView(LoginRequiredMixin,DeleteView):
     model = SubscriptionPackage
     template_name = 'main_app/subscription_package_confirm_delete.html'
-    success_url = reverse_lazy('subscription_package_list')  # Redirect to the list page after deletion
+    success_url = reverse_lazy('subscription_list')  # Redirect to the list page after deletion
 
 
 @login_required
@@ -59,7 +66,7 @@ def subscribe_to_package(request, package_id):
         # Check if the current active subscription has expired
         today = timezone.now().date()
         if active_subscription.endDate < today:  # If the active subscription has expired
-            active_subscription.status = 'Inactive'  # Change the status to 'Inactive'
+            active_subscription.status = 'Inactive'  
             active_subscription.save()
 
      
@@ -118,6 +125,10 @@ def subscription_package_list(request):
 
     return render(request, 'main_app/subscription_package_list.html', {'packages': packages})
 
+
+# ----------------------------------------------------------------------------------------------
+
+# Regestration
 
 @login_required
 def register_for_session(request, session_id):
@@ -188,16 +199,22 @@ def view_my_registrations(request):
 
     return render(request, 'main_app/my_registrations.html', {'registrations': registrations})
 
+class RegisterUpdate(LoginRequiredMixin, UpdateView):
+    model = Registration
+    fields = ['status','comment']
+    
+    
+    template_name = 'main_app/registration_form.html'  # Update this line to match your actual template name
+
+    def form_valid(self, form):
+        form.save()
+        return redirect('view_my_registrations')
 
 
-# # subscription view
-# @login_required
-# def view_my_subscriptions(request):
-#     subscriptions = Subscription.objects.filter(user=request.user)  # Filter subscriptions by the logged-in user
-#     return render(request, 'main_app/my_subscriptions.html', {'subscriptions': subscriptions})
 
+# ----------------------------------------------------------------------------------------------
 
-
+# Subscriptions
 
 @login_required
 def view_my_subscriptions(request):
@@ -212,6 +229,8 @@ def view_my_subscriptions(request):
 
     return render(request, 'main_app/my_subscriptions.html', {'subscriptions': subscriptions})
 
+# ----------------------------------------------------------------------------------------------
+#  Profile
 
 class ProfileCreate(LoginRequiredMixin,CreateView):
     model = Profile
@@ -228,6 +247,9 @@ class ProfileCreate(LoginRequiredMixin,CreateView):
         age = form.instance.age
         weight = form.instance.weight
         height = form.instance.height
+        user = self.request.user
+        if user.is_staff:
+            return redirect('home')
 
         if age < 0:
             form.add_error('age', 'Age cannot be less than 0.')
@@ -267,6 +289,39 @@ class ProfileUpdate(LoginRequiredMixin,UpdateView):
 
         profile.save()  # SaveProfile
         return redirect(self.success_url)  # Redirect to /profile/
+    
+
+# profile view
+@login_required
+def profile(request):
+    return render(request, 'profile.html')
+
+# ----------------------------------------------------------------------------------------------
+
+# GYM
+
+@login_required
+
+def class_index(request):
+    if request.user.profile.type == 'NU':
+        # Get the gyms where the Gym Owner has an active subscription
+        gyms_with_active_subscription = []
+        
+        # Loop through all gyms owned by Gym Owners and check if they have an active subscription
+        for gym in Gym.objects.filter(user__profile__type='GO'):
+            if _has_active_subscription(gym.user):
+                gyms_with_active_subscription.append(gym)
+        
+        gyms = gyms_with_active_subscription
+    else:
+        # Gym Owners can see all their gyms
+        gyms = Gym.objects.filter(user=request.user)
+
+    return render(request, 'gyms/index.html', {'gyms': gyms})
+
+def _has_active_subscription(gym_owner):
+    """Helper method to check if the Gym Owner has an active subscription"""
+    return Subscription.objects.filter(user=gym_owner, status="Active").exists()
 
 
 
@@ -295,45 +350,23 @@ class GymDelete(LoginRequiredMixin, DeleteView):
     success_url = '/gyms/'
 
 
-
-# class SessionList(LoginRequiredMixin, ListView):
-#     model = Session
-#     template_name = 'session/index.html'  # Ensure this is the correct template
+@login_required
+def gyms_detail(request, gym_id):
+    gym = Gym.objects.get(id=gym_id)
     
-#     def get_queryset(self):
-#         # Check if the user is a Gym Owner (GO) or Normal User (NU)
-#         if self.request.user.profile.type == 'NU':
-#             # If Normal User, get all sessions
-#             return Session.objects.all()
-#         else:
-#             # If Gym Owner, get only sessions related to the gym owned by the user
-#             return Session.objects.filter(user=self.request.user)
+    profile = request.user.profile
+
+    trainers = Trainer.objects.filter(gym=gym)
 
 
-# class SessionList(LoginRequiredMixin, ListView):
-#     model = Session
-#     template_name = 'session/index.html'  # Ensure this is the correct template
-    
-#     def get_queryset(self):
-#         # If the user is a Normal User (NU), filter sessions based on Gym Owner's active subscription
-#         if self.request.user.profile.type == 'NU':
-#             # Get the gyms owned by Gym Owners (GO)
-#             gyms = Gym.objects.filter(user__profile__type='GO')
-            
-#             # Filter sessions related to gyms that have active subscriptions for the Gym Owner (GO)
-#             active_gym_owners = [gym.user for gym in gyms if self._has_active_subscription(gym.user)]
-            
-#             # Only show sessions that belong to gyms with an active Gym Owner's subscription
-#             return Session.objects.filter(gym__user__in=active_gym_owners)
-        
-#         # If the user is a Gym Owner (GO), show all sessions for the gym owned by the user
-#         return Session.objects.filter(user=self.request.user)
-
-#     def _has_active_subscription(self, gym_owner):
-#         """Helper method to check if the Gym Owner has an active subscription"""
-#         return Subscription.objects.filter(user=gym_owner, status="Active").exists()
+    return render(request,'gyms/detail.html', {'gym' : gym, 'trainers': trainers, 'profile': profile })
 
 
+
+
+# ----------------------------------------------------------------------------------------------
+
+# Session
 
 
 class SessionList(LoginRequiredMixin, ListView):
@@ -441,8 +474,9 @@ class SessionDelete(LoginRequiredMixin, DeleteView):
     success_url = '/session/'
 
 
-
+# ----------------------------------------------------------------------------------------------
 # trainer
+
 class TrainerDetail(LoginRequiredMixin, DetailView):
     model = Trainer
     fields = "__all__"
@@ -480,19 +514,26 @@ class TrainerDelete(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         gym_id = self.object.gym.id 
         return f'/gyms/{gym_id}/'
-
-
-
-class RegisterUpdate(LoginRequiredMixin, UpdateView):
-    model = Registration
-    fields = ['status','comment']
     
-    
-    template_name = 'main_app/registration_form.html'  # Update this line to match your actual template name
 
-    def form_valid(self, form):
-        form.save()
-        return redirect('view_my_registrations')
+# added assoc and unassoc between trainer and session
+
+def assoc_trainer(request, session_id, trainer_id):
+    session = Session.objects.get(id=session_id)
+    trainer = Trainer.objects.get(id=trainer_id)
+    session.trainers.add(trainer)
+    
+    return redirect('session_detail', pk=session_id) 
+
+def unassoc_trainer(request, session_id, trainer_id):
+    session = Session.objects.get(id=session_id)
+    trainer = Trainer.objects.get(id=trainer_id)
+    session.trainers.remove(trainer)
+    
+    return redirect('session_detail', pk=session_id) 
+
+# ----------------------------------------------------------------------------------------------
+# About and Home
 
 
 
@@ -503,53 +544,9 @@ def about(request):
     return render(request,'about.html')
 
 
-# change this to gym_index
-# @login_required
-# def class_index(request): 
 
-#     if request.user.profile.type == 'NU':
-#         gyms = Gym.objects.all()
-#     else:
-#         gyms = Gym.objects.filter(user=request.user)
-#     return render(request,'gyms/index.html' , {'gyms' : gyms})
-
-@login_required
-def class_index(request):
-    if request.user.profile.type == 'NU':
-        # Get the gyms where the Gym Owner has an active subscription
-        gyms_with_active_subscription = []
-        
-        # Loop through all gyms owned by Gym Owners and check if they have an active subscription
-        for gym in Gym.objects.filter(user__profile__type='GO'):
-            if _has_active_subscription(gym.user):
-                gyms_with_active_subscription.append(gym)
-        
-        gyms = gyms_with_active_subscription
-    else:
-        # Gym Owners can see all their gyms
-        gyms = Gym.objects.filter(user=request.user)
-
-    return render(request, 'gyms/index.html', {'gyms': gyms})
-
-def _has_active_subscription(gym_owner):
-    """Helper method to check if the Gym Owner has an active subscription"""
-    return Subscription.objects.filter(user=gym_owner, status="Active").exists()
-
-
-
-@login_required
-def gyms_detail(request, gym_id):
-    gym = Gym.objects.get(id=gym_id)
-    
-    profile = request.user.profile
-
-    trainers = Trainer.objects.filter(gym=gym)
-
-    
-
-    return render(request,'gyms/detail.html', {'gym' : gym, 'trainers': trainers, 'profile': profile })
-
-
+# ----------------------------------------------------------------------------------------------
+# Auth
 
 def signup(request):
   error_message = ''
@@ -567,24 +564,8 @@ def signup(request):
   return render(request, 'registration/signup.html', context)
 
 
-  # profile view
-@login_required
-def profile(request):
-    return render(request, 'profile.html')
 
 
-# added assoc and unassoc between trainer and session
 
-def assoc_trainer(request, session_id, trainer_id):
-    session = Session.objects.get(id=session_id)
-    trainer = Trainer.objects.get(id=trainer_id)
-    session.trainers.add(trainer)
-    
-    return redirect('session_detail', pk=session_id) 
 
-def unassoc_trainer(request, session_id, trainer_id):
-    session = Session.objects.get(id=session_id)
-    trainer = Trainer.objects.get(id=trainer_id)
-    session.trainers.remove(trainer)
-    
-    return redirect('session_detail', pk=session_id) 
+
