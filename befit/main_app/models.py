@@ -1,7 +1,6 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
-from datetime import date
 
 
 
@@ -57,7 +56,7 @@ class Gym(models.Model):
     phoneNumber = models.CharField()
     description = models.CharField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # trainer = models.ForeignKey(Trainer, on_delete = models.CASCADE)
+  
 
     # direct the user to newly created page
     def get_absolute_url(self):
@@ -68,6 +67,7 @@ class Gym(models.Model):
         return self.gym
 
 
+# Trainer Model
 class Trainer(models.Model):
     name = models.CharField(max_length=50)
     age = models.IntegerField()
@@ -80,6 +80,7 @@ class Trainer(models.Model):
         return self.name
 
 
+# Session Model
 class Session(models.Model):
     name = models.CharField(max_length=50)
     location = models.CharField(max_length=20)
@@ -104,7 +105,7 @@ class Session(models.Model):
 
 
 
-
+# Packages Model
 class SubscriptionPackage(models.Model):
 
     name = models.CharField(max_length=100)
@@ -120,6 +121,7 @@ class SubscriptionPackage(models.Model):
         return reverse('subscription_package_detail', kwargs={'pk': self.id})
 
 
+# Subscription record Model
 class Subscription(models.Model):
     package = models.ForeignKey(SubscriptionPackage, on_delete=models.CASCADE)
     startDate = models.DateField()
@@ -134,6 +136,8 @@ class Subscription(models.Model):
         return reverse('subscription_detail', kwargs={'pk': self.id})  # Fix this to return a string
 
 
+
+# Registration record Model
 class Registration(models.Model):
         session = models.ForeignKey(Session,on_delete=models.CASCADE, default=1)
         user = models.ForeignKey(User, on_delete=models.CASCADE)

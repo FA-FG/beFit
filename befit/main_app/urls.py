@@ -7,12 +7,11 @@ from .views import profile, Trainer
 urlpatterns = [
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
-    path('classes/', views.class_index, name='index'),
     path('accouts/signup/', views.signup, name="signup"),
+    # path('classes/', views.class_index, name='index'),
 
     #profile path
     path('profile/', profile, name='profile'),
-    ## add profile info
     path('profile/create/', views.ProfileCreate.as_view(), name='profile_create'),
     path('profile/<int:pk>/update/', views.ProfileUpdate.as_view(), name='profile_update'),
 
@@ -25,12 +24,13 @@ urlpatterns = [
     path('gyms/<int:pk>/delete', views.GymDelete.as_view(), name='gyms_delete'),
 
 
-
+    # subscriptions 
     path('subscriptions/packages/', views.subscription_package_list, name='subscription_package_list'),
     path('subscriptions/subscribe/<int:package_id>/', views.subscribe_to_package, name='subscribe_to_package'),
     path('subscriptions/my/', views.view_my_subscriptions, name='view_my_subscriptions'),
 
 
+    # subscriptions packages
     path('subscription-packages/', views.SubscriptionPackageListView.as_view(), name='subscription_list'),
     path('subscription-packages/create/', views.SubscriptionPackageCreateView.as_view(), name='subscription_package_create'),
     path('subscription-packages/<int:pk>/edit/', views.SubscriptionPackageUpdateView.as_view(), name='subscription_package_edit'),
@@ -38,7 +38,7 @@ urlpatterns = [
 
 
 
-
+    # session
     path('session/', views.SessionList.as_view(), name='session_index'),
     path('session/<int:pk>/', views.SessionDetail.as_view(), name='session_detail'),
     path('session/create/', views.SessionCreate.as_view(), name='session_create'),
