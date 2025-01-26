@@ -25,25 +25,27 @@
 
 ## **Full Entity Relationship Diagram:**
 
-![ERD](img/ERD.png)
+![ERD](https://github.com/user-attachments/assets/43234534-995b-4c57-8897-86db1105f6ce)
 
 
 ## **Wireframe :**
 
-Sign up / login page :
-![login](img/login.png)
-Home page :
-![home](img/home.png)
-Profile page :
-![profile](img/profile.png)
+## login page :
+![Login](https://github.com/user-attachments/assets/095a37f8-1872-4a01-90cd-2d1efd4f3420)
 
 
-Home page :
-![home](img/profilee.png)
+## Profile page :
+![Profile](https://github.com/user-attachments/assets/00e9a143-aa53-4952-8164-0c27eb620ad4)
 
-profile page :
-![dreams](img/register.png)
-![dreams](img/gym.png)
+
+## Home page :
+![Home](https://github.com/user-attachments/assets/fe69d1e6-f0b0-4d40-8187-7b03f8f03ef4)
+
+## Sign up page :
+![Regiter](https://github.com/user-attachments/assets/8551abf8-1c85-4193-97b0-123a8d5ca4ec)
+
+## GYM page :
+![Gym](https://github.com/user-attachments/assets/bb337bf8-e70b-4817-ad89-59ad69b6f5ba)
 
 ## **Future enhancement :**
 
